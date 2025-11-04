@@ -29,35 +29,28 @@ const logger = pino({
 
 // --- Inisialisasi Kunci Servis & Prisma ---
 // --- Inisialisasi Kunci Servis & Prisma ---
-// --- Inisialisasi Kunci Servis & Prisma ---
 try {
-    const rawPrivateKey = process.env.FIREBASE_PRIVATE_KEY;
-
-    if (!rawPrivateKey) {
-        throw new Error('FIREBASE_PRIVATE_KEY environment variable is not set.');
-    }
-
-    // KODE PINTAR: Cek apakah key-nya berisi teks '\n' (format 1 baris)
-    // atau sudah berisi baris baru asli (format multi-baris).
-    // Ini akan menangani kedua kasus tersebut.
-    const privateKey = rawPrivateKey.includes('\\n')
-        ? rawPrivateKey.replace(/\\n/g, '\n')
-        : rawPrivateKey;
-
+    // Kita HANYA akan membaca langsung dari Environment Variables
+    // Tanpa .replace() sama sekali.
     const serviceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: privateKey // Gunakan key yang sudah diproses
+      privateKey: process.env.FIREBASE_PRIVATE_KEY 
     };
+
+    // Cek apakah semua variabel ada
+    if (!serviceAccount.privateKey || !serviceAccount.projectId || !serviceAccount.clientEmail) {
+        throw new Error('Variabel Firebase (PROJECT_ID, CLIENT_EMAIL, atau PRIVATE_KEY) tidak lengkap di Vercel.');
+    }
 
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
     });
-    logger.info('Firebase Admin berhasil diinisialisasi.');
+    logger.info('Firebase Admin berhasil diinisialisasi (Metode Langsung).');
 
 } catch (e) {
-    logger.error({ err: e }, 'FATAL: Gagal inisialisasi Firebase Admin! Cek Environment Variables.');
-    console.error('FATAL: Gagal inisialisasi Firebase Admin! Cek Environment Variables.', e.message);
+    logger.error({ err: e }, 'FATAL: Gagal inisialisasi Firebase Admin! Cek format Environment Variables di Vercel.');
+    console.error('FATAL: Gagal inisialisasi Firebase Admin! Cek format Environment Variables di Vercel.', e.message);
     process.exit(1);
 }
 
