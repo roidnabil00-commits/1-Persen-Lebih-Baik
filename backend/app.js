@@ -11,6 +11,7 @@ const { PrismaClient } = require('@prisma/client');
 const multer = require('multer');
 const pdfParse = require('pdf-parse');
 const pino = require('pino');
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 
 // --- Konfigurasi Pino Logger (VERSI BARU UNTUK VERCEL) ---
 
@@ -140,19 +141,92 @@ const checkAuth = async (req, res, next) => {
 // =================================================================
 // (B) API PROXY (pakai logger)
 // =================================================================
-const GOOGLE_API_URL = `https...`;
+const GOOGLE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
+
 app.post('/api/v1/generate', checkAuth, async (req, res) => {
-    // ... (kode generate kamu) ...
-});
-app.get('/', (req, res) => {
-    // ... (kode / kamu) ...
+    logger.info(`[${req.uid}] Menerima request ke /api/v1/generate`);
+    
+    if (!GOOGLE_API_KEY) {
+         logger.error('GOOGLE_API_KEY tidak diset di server.');
+         return res.status(500).json({ message: 'Server tidak dikonfigurasi dengan benar.' });
+    }
+    
+    try {
+        const response = await axios.post(GOOGLE_API_URL, req.body, {
+             headers: { 'Content-Type': 'application/json' }
+        });
+        
+        logger.info(`[${req.uid}] Berhasil mendapat respons dari Google AI`);
+        res.json(response.data);
+
+    } catch (error) {
+        logger.error({ err: error.response?.data || error.message }, 'Error saat memanggil Google AI');
+        res.status(500).json({ 
+            message: 'Gagal menghubungi AI', 
+            detail: error.response?.data || error.message 
+        });
+    }
 });
 
 // =================================================================
 // (B.2) API PROSES UPLOAD CV
 // =================================================================
-app.post('/api/v1/process-cv', checkAuth, upload.single('cv-upload'), async (req, res) => {
-    // ... (kode process-cv kamu) ...
+app.post('/api/v1/process-cv', checkAuth, upload.single('cvFile'), async (req, res) => {
+    logger.info(`[${req.uid}] Menerima request ke /api/v1/process-cv`);
+
+    if (!GOOGLE_API_KEY) {
+        logger.error('GOOGLE_API_KEY tidak diset di server.');
+        return res.status(500).json({ message: 'Server tidak dikonfigurasi dengan benar.' });
+    }
+    if (!req.file) {
+        return res.status(400).json({ message: 'Tidak ada file PDF yang di-upload.' });
+    }
+
+    try {
+        // 1. Parse PDF
+        const dataBuffer = req.file.buffer;
+        const data = await pdfParse(dataBuffer);
+        const cvText = data.text;
+        
+        logger.info(`[${req.uid}] Berhasil mem-parsing ${req.file.originalname}`);
+
+        // 2. Ambil promptId dari body
+        const promptId = req.body.promptId || 'polish'; // default 'polish'
+
+        // 3. Tentukan prompt berdasarkan promptId
+        let systemPrompt;
+        if (promptId === 'job-scout') {
+            systemPrompt = "Kamu adalah AI Job Hunter. Analisis teks CV ini dan berikan 5 link pencarian JobStreet atau LinkedIn yang paling relevan. Format HANYA JSON: [{\"portal_name\": \"JobStreet\", \"search_link\": \"https://...\"}, ...]";
+        } else {
+            // Default: 'polish'
+            systemPrompt = "Kamu adalah HRD profesional. Review teks CV ini. Berikan feedback dalam format JSON: {\"versi_baru\": \"(Tulis ulang bagian 'Pengalaman Kerja' atau 'Tentang Saya' jadi 1 paragraf singkat yang profesional)\", \"poin_perbaikan\": [\"(Poin 1 perbaikan)\", \"(Poin 2 perbaikan)\"], \"kritik_saran\": [\"(Kritik 1)\", \"(Kritik 2)\"], \"skor_ats\": 85}";
+        }
+
+        const prompt = `${systemPrompt}\n\nBerikut adalah teks CV-nya:\n${cvText}`;
+
+        // 4. Kirim ke Google AI
+        const payload = {
+            contents: [{ parts: [{ text: prompt }] }]
+        };
+        const response = await axios.post(GOOGLE_API_URL, payload, {
+            headers: { 'Content-Type': 'application/json' }
+        });
+        
+        logger.info(`[${req.uid}] Berhasil mendapat respons AI untuk CV`);
+        res.json(response.data);
+
+    } catch (error) {
+        logger.error({ err: error.response?.data || error.message }, 'Error saat memproses CV');
+        let errorMessage = 'Gagal memproses CV.';
+        if (error.message.includes('PDF')) {
+            errorMessage = 'File bukan PDF valid atau PDF rusak.';
+            return res.status(400).json({ message: errorMessage });
+        }
+        res.status(500).json({ 
+            message: errorMessage, 
+            detail: error.response?.data || error.message 
+        });
+    }
 });
 
 // =================================================================
