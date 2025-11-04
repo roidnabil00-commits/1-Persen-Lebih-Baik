@@ -1,0 +1,36 @@
+# ---------------------------------------------------------------------------
+# === FILE RAHASIA & KONFIGURASI ===
+# JANGAN PERNAH UPLOAD FILE-FILE DI BAWAH INI KE GITHUB
+# ---------------------------------------------------------------------------
+
+# File environment (berisi API key, password DB, dll)
+.env
+
+# Kunci Google Service Account (SANGAT RAHASIA)
+# Path ini disesuaikan dengan screenshot Anda, di mana file ini ada di dalam folder 'backend'
+backend/serviceAccountKey.json
+
+
+# ---------------------------------------------------------------------------
+# === DEPENDENSI & FOLDER GENERATED ===
+# File/folder ini akan dibuat ulang saat proses 'npm install' atau 'prisma generate'
+# ---------------------------------------------------------------------------
+
+# Abaikan folder node_modules di folder manapun (baik di root, di dalam backend, dll)
+node_modules/
+
+# Abaikan folder 'generated' dari Prisma
+/generated/prisma
+
+
+# ---------------------------------------------------------------------------
+# === FILE LOG & DATABASE LOKAL ===
+# File-file ini tidak diperlukan di repository
+# ---------------------------------------------------------------------------
+
+# Abaikan semua file log
+*.log
+
+# Abaikan file database tes lokal (jika pakai SQLite)
+*.db
+*.db-journal

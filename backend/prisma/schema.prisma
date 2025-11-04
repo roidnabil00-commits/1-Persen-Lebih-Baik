@@ -1,0 +1,116 @@
+// File: prisma/schema.prisma 
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Ini bagian yang kita perbaiki (pakai file, bukan .env)
+// prisma/schema.prisma
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// Ini model data yang Anda salin (sudah benar)
+model User {
+  id         String      @id @unique
+  email      String      @unique
+  nama       String?
+  createdAt  DateTime    @default(now())
+  todos      Todo[]      
+  salesNotes SalesNote[] 
+  careerMap  CareerMap?  // <-- TAMBAHKAN BARIS INI
+  businessMap BusinessMap?
+  dashboards  DailyDashboard[]
+}
+model Todo {
+  id          Int      @id @default(autoincrement())
+  text        String
+  completed   Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  // Relasi ke User
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+// Model untuk Catatan Pribadi (dari Salesbisnis.html)
+model SalesNote {
+  id        Int      @id @default(autoincrement())
+  moduleId  String   // ID modul (cth: "0.1" atau "1.2")
+  content   String   // Isi catatannya
+  updatedAt DateTime @updatedAt
+
+  // Relasi ke User
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+
+  // Pastikan 1 user hanya punya 1 catatan per modul
+  @@unique([userId, moduleId]) 
+}
+
+// Model untuk Peta Karir (dari PetaKarir.html)
+model CareerMap {
+  id          Int      @id @default(autoincrement())
+
+  // Data dari Step 1, 2, 3
+  goal        String?  // Cita-cita
+  hardSkills  String?  // Skill Keras
+  softSkills  String?  // Skill Lunak
+  skillGap    String?  // Yang perlu diasah
+
+  updatedAt   DateTime @updatedAt
+
+  // Relasi ke User (Satu User punya satu Peta Karir)
+  userId      String   @unique // @unique berarti 1-to-1
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+// Model untuk Peta Bisnis (dari Petabisnis.html)
+model BusinessMap {
+  id          Int      @id @default(autoincrement())
+
+  // Data dari Step 1-5
+  personalStory   String?
+  currentActivity String?
+  maritalStatus   String?
+  emergencyFund   String?
+  skill           String?
+  capital         String? // Kita simpan sebagai String agar fleksibel
+  time            String?
+  knowledge       String?
+  connections     Json?   // Kita simpan array koneksi sebagai JSON
+  opportunities   String?
+
+  updatedAt   DateTime @updatedAt
+
+  // Relasi ke User (Satu User punya satu Peta Bisnis)
+  userId      String   @unique // @unique berarti 1-to-1
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+// Model untuk Dasbor Harian (dari BerandaProduktif.html)
+model DailyDashboard {
+  id        Int      @id @default(autoincrement())
+
+  // Data harian
+  dateString  String   // Kita gunakan tanggal (cth: "03/11/2025") sebagai ID harian
+  bigWin      String?  // Target Terbesar
+  schedule    Json?    // Data Alokasi Waktu (disimpan sebagai JSON)
+
+  // Data Evaluasi
+  reviewAchieved    Boolean  @default(false)
+  reviewBest        String?
+  reviewLesson      String?
+
+  updatedAt   DateTime @updatedAt
+
+  // Relasi ke User
+  userId      String   
+  user        User     @relation(fields: [userId], references: [id])
+
+  // Pastikan 1 user hanya punya 1 dasbor per tanggal
+  @@unique([userId, dateString])
+}

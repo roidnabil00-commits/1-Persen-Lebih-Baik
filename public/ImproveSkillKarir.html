@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool: Improve Skill - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3, h4 { font-weight: 900; }
+        .skill-card {
+            transition: all 0.3s ease;
+        }
+        .skill-card:hover {
+            transform: translateY(-8px);
+            border-color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <!-- Header -->
+    <header class="bg-slate-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                 <!-- Tautan diperbarui -->
+                <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                     <!-- Tautan diperbarui -->
+                    <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-slate-300 hover:text-sky-400 transition">Produktif</a>
+                </nav>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+     <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+             <!-- Tautan diperbarui -->
+            <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-white font-bold">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Produktif</a>
+        </div>
+    </div>
+
+
+    <main class="py-16">
+        <div id="skill-hub-container" class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+
+            <!-- Main Grid View -->
+            <div id="grid-view">
+                <div class="text-center mb-16">
+                    <h1 class="text-4xl md:text-5xl font-black text-white">Galeri Skill Masa Depan</h1>
+                    <p class="mt-4 text-lg text-slate-400">Pilih satu skill yang ingin kamu kuasai. Kami sudah siapkan peta jalan dan sumber belajar terbaiknya untukmu.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                    <!-- Skill Card: Analisis Data -->
+                    <button data-skill="data-analysis" class="skill-card glass-card rounded-2xl p-8 text-left border-2 border-transparent">
+                        <i data-lucide="bar-chart-3" class="w-12 h-12 text-sky-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">Analisis Data</h2>
+                        <p class="text-slate-400">Belajar membaca, mengolah, dan menceritakan data untuk mengambil keputusan bisnis yang lebih baik.</p>
+                    </button>
+
+                    <!-- Skill Card: Pemasaran Digital -->
+                    <button data-skill="digital-marketing" class="skill-card glass-card rounded-2xl p-8 text-left border-2 border-transparent">
+                        <i data-lucide="megaphone" class="w-12 h-12 text-sky-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">Pemasaran Digital</h2>
+                        <p class="text-slate-400">Kuasai SEO, SEM, Media Sosial, dan Content Marketing untuk menjangkau audiens yang tepat.</p>
+                    </button>
+
+                    <!-- Skill Card: Manajemen Produk -->
+                    <button data-skill="product-management" class="skill-card glass-card rounded-2xl p-8 text-left border-2 border-transparent">
+                        <i data-lucide="box" class="w-12 h-12 text-sky-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">Manajemen Produk</h2>
+                        <p class="text-slate-400">Belajar bagaimana menjadi 'CEO mini' untuk sebuah produk, dari ide hingga peluncuran.</p>
+                    </button>
+
+                    <!-- Skill Card: Desain UI/UX -->
+                    <button data-skill="ui-ux" class="skill-card glass-card rounded-2xl p-8 text-left border-2 border-transparent">
+                        <i data-lucide="figma" class="w-12 h-12 text-sky-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">Desain UI/UX</h2>
+                        <p class="text-slate-400">Rancang pengalaman pengguna yang intuitif dan antarmuka yang indah untuk produk digital.</p>
+                    </button>
+
+                    <!-- Skill Card: AI -->
+                    <button data-skill="ai-ml" class="skill-card glass-card rounded-2xl p-8 text-left border-2 border-transparent">
+                        <i data-lucide="brain-circuit" class="w-12 h-12 text-sky-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">AI & Machine Learning</h2>
+                        <p class="text-slate-400">Pahami dasar-dasar kecerdasan buatan untuk membangun produk yang lebih cerdas di masa depan.</p>
+                    </button>
+
+                    <!-- Skill Card: Soft Skills -->
+                    <button data-skill="soft-skills" class="skill-card glass-card rounded-2xl p-8 text-left border-2 border-transparent">
+                        <i data-lucide="users" class="w-12 h-12 text-sky-400 mb-4"></i>
+                        <h2 class="text-2xl font-bold text-white mb-2">Komunikasi & Kepemimpinan</h2>
+                        <p class="text-slate-400">Asah soft skill-mu untuk memimpin tim, bernegosiasi, dan mempresentasikan ide dengan percaya diri.</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Detail View (Hidden by default) -->
+            <div id="detail-view" class="hidden">
+                <button id="back-to-grid" class="flex items-center text-slate-400 hover:text-white transition-colors mb-6 font-semibold">
+                    <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                    Kembali ke Galeri Skill
+                </button>
+                <div class="glass-card rounded-2xl p-8 md:p-12">
+                    <div id="detail-content">
+                        <!-- Content will be injected here by JS -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Hidden container for skill detail data -->
+    <div id="skill-data" class="hidden">
+
+        <!-- Data for Analisis Data -->
+        <div data-skill="data-analysis">
+            <h1 class="text-4xl font-bold text-white mb-4">Analisis Data</h1>
+            <p class="text-lg text-slate-400 mb-8">Skill ini adalah tentang mengubah data mentah menjadi wawasan yang bisa ditindaklanjuti. Kamu akan belajar cara mengumpulkan, membersihkan, menganalisis, dan memvisualisasikan data untuk membantu perusahaan mengambil keputusan yang lebih cerdas.</p>
+
+            <h3 class="text-2xl font-bold text-white mb-4">Peta Jalan Belajar (Roadmap)</h3>
+            <ol class="list-decimal list-inside space-y-2 text-slate-300 mb-8">
+                <li><b>Fondasi:</b> Kuasai Excel (Pivot Table, VLOOKUP, Charting).</li>
+                <li><b>Database:</b> Belajar dasar-dasar SQL (SELECT, FROM, WHERE, JOIN).</li>
+                <li><b>Visualisasi:</b> Belajar membuat dasbor (Looker Studio / Tableau / Power BI).</li>
+                <li><b>Lanjutan (Opsional):</b> Belajar bahasa pemrograman (Python atau R) untuk analisis yang lebih kompleks.</li>
+            </ol>
+
+            <h3 class="text-2xl font-bold text-white mb-6">Sumber Belajar Pilihanmu</h3>
+            <div class="space-y-6">
+                <!-- Kursus Online -->
+                <div>
+                    <h4 class="text-lg font-semibold text-sky-400 mb-3">Kursus Online (Rekomendasi)</h4>
+                    <div class="glass-card rounded-lg p-6">
+                        <h5 class="text-xl font-bold text-white">Google Data Analytics Professional Certificate</h5>
+                        <p class="text-sm text-slate-400 my-2">Kursus fundamental terbaik untuk pemula yang ingin membangun portofolio dari nol. Sangat diakui industri.</p>
+                        <h6 class="text-xs font-semibold text-slate-300 uppercase mb-2">Materi Pendukung:</h6>
+                        <ul class="list-disc list-inside text-sm text-sky-300 space-y-1">
+                            <li><a href="#" class="hover:underline">Artikel: Rangkuman Modul 1 (Fondasi Data)</a></li>
+                            <li><a href="#" class="hover:underline">YouTube: Review Jujur & Tips Lulus Ujian Sertifikasi Google</a></li>
+                        </ul>
+                        <a href="https://www.coursera.org/professional-certificates/google-data-analytics" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-lg text-sm mt-4">Kunjungi Kursus (Coursera)</a>
+                    </div>
+                </div>
+
+                <!-- Channel YouTube -->
+                <div>
+                    <h4 class="text-lg font-semibold text-sky-400 mb-3">Channel YouTube (Gratis & Kredibel)</h4>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div class="glass-card rounded-lg p-6">
+                            <h5 class="text-xl font-bold text-white">Alex The Analyst</h5>
+                            <p class="text-sm text-slate-400 my-2">Sangat direkomendasikan untuk pemula yang ingin belajar SQL dan membuat proyek portofolio dunia nyata.</p>
+                            <a href="https://www.youtube.com/@AlexTheAnalyst" target="_blank" class="inline-block bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm mt-4">Kunjungi Channel</a>
+                        </div>
+                         <div class="glass-card rounded-lg p-6">
+                            <h5 class="text-xl font-bold text-white">Ken Jee</h5>
+                            <p class="text-sm text-slate-400 my-2">Fokus pada portofolio data science dan tips praktis bagaimana mendapatkan pekerjaan pertama di bidang data.</p>
+                            <a href="https://www.youtube.com/@KenJee_ds" target="_blank" class="inline-block bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm mt-4">Kunjungi Channel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data for Pemasaran Digital -->
+         <div data-skill="digital-marketing">
+            <h1 class="text-4xl font-bold text-white mb-4">Pemasaran Digital</h1>
+            <p class="text-lg text-slate-400 mb-8">Ini adalah skill untuk mempromosikan produk atau brand menggunakan media digital. Kamu akan belajar SEO, Iklan (SEM/Ads), Media Sosial, dan Content Marketing untuk menjangkau jutaan orang secara online.</p>
+
+            <h3 class="text-2xl font-bold text-white mb-4">Peta Jalan Belajar (Roadmap)</h3>
+            <ol class="list-decimal list-inside space-y-2 text-slate-300 mb-8">
+                <li><b>Fondasi:</b> Pahami Marketing Funnel (Awareness, Consideration, Conversion).</li>
+                <li><b>Media Sosial:</b> Pilih satu platform (cth: TikTok atau Instagram) dan kuasai cara membuat konten yang menarik.</li>
+                <li><b>Akuisisi Trafik:</b> Belajar dasar-dasar SEO (agar mudah ditemukan di Google) dan Iklan (Facebook/Google Ads).</li>
+                <li><b>Analisis:</b> Belajar membaca data (cth: Google Analytics) untuk mengukur keberhasilan kampanyemu.</li>
+            </ol>
+
+            <h3 class="text-2xl font-bold text-white mb-6">Sumber Belajar Pilihanmu</h3>
+            <div class="space-y-6">
+                <!-- Kursus Online -->
+                <div>
+                    <h4 class="text-lg font-semibold text-sky-400 mb-3">Kursus Online (Rekomendasi)</h4>
+                    <div class="glass-card rounded-lg p-6">
+                        <h5 class="text-xl font-bold text-white">HubSpot Academy - Digital Marketing</h5>
+                        <p class="text-sm text-slate-400 my-2">Salah satu sertifikasi gratis dan paling diakui di dunia. Sangat komprehensif mencakup semua aspek.</p>
+                        <a href="https://academy.hubspot.com/courses/digital-marketing" target="_blank" class="inline-block bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-lg text-sm mt-4">Kunjungi Kursus (Gratis)</a>
+                    </div>
+                </div>
+                <!-- Channel YouTube -->
+                <div>
+                    <h4 class="text-lg font-semibold text-sky-400 mb-3">Channel YouTube (Gratis & Kredibel)</h4>
+                    <div class="glass-card rounded-lg p-6">
+                        <h5 class="text-xl font-bold text-white">Neil Patel</h5>
+                        <p class="text-sm text-slate-400 my-2">Salah satu pakar SEO dan digital marketing top dunia. Memberikan tips-tips praktis yang bisa langsung diterapkan.</p>
+                        <a href="https://www.youtube.com/@NeilPatel" target="_blank" class="inline-block bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg text-sm mt-4">Kunjungi Channel</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Placeholder for other skills -->
+        <div data-skill="product-management"><h1 class="text-4xl font-bold text-white mb-4">Manajemen Produk</h1><p class="text-slate-400">Konten untuk Manajemen Produk akan segera hadir!</p></div>
+        <div data-skill="ui-ux"><h1 class="text-4xl font-bold text-white mb-4">Desain UI/UX</h1><p class="text-slate-400">Konten untuk Desain UI/UX akan segera hadir!</p></div>
+        <div data-skill="ai-ml"><h1 class="text-4xl font-bold text-white mb-4">AI & Machine Learning</h1><p class="text-slate-400">Konten untuk AI & Machine Learning akan segera hadir!</p></div>
+        <div data-skill="soft-skills"><h1 class="text-4xl font-bold text-white mb-4">Komunikasi & Kepemimpinan</h1><p class="text-slate-400">Konten untuk Soft Skills akan segera hadir!</p></div>
+    </div>
+
+
+<script>
+lucide.createIcons();
+
+// --- Basic UI Setup ---
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('hidden'));
+document.getElementById('close-mobile-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+// --- Skill Hub Logic ---
+const el = {
+    gridView: document.getElementById('grid-view'),
+    detailView: document.getElementById('detail-view'),
+    backToGridBtn: document.getElementById('back-to-grid'),
+    detailContent: document.getElementById('detail-content'),
+    skillDataContainer: document.getElementById('skill-data')
+};
+
+document.querySelectorAll('.skill-card').forEach(card => {
+    card.addEventListener('click', () => {
+        const skillId = card.dataset.skill;
+        const skillContent = el.skillDataContainer.querySelector(`[data-skill="${skillId}"]`);
+
+        if (skillContent) {
+            el.detailContent.innerHTML = skillContent.innerHTML;
+            el.gridView.classList.add('hidden');
+            el.detailView.classList.remove('hidden');
+            window.scrollTo(0, 0); // Scroll to top
+            lucide.createIcons(); // Re-render icons in the new content
+        }
+    });
+});
+
+el.backToGridBtn.addEventListener('click', () => {
+    el.detailView.classList.add('hidden');
+    el.gridView.classList.remove('hidden');
+    window.scrollTo(0, 0);
+});
+
+</script>
+</body>
+</html>

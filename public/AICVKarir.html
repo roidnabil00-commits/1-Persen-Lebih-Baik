@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool: AI CV Reviewer - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3, h4 { font-weight: 900; }
+        .result-container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Tambahkan style untuk hidden */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <header class="bg-slate-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                 <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                     <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-slate-300 hover:text-sky-400 transition">Produktif</a>
+                </nav>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+     <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+             <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-white font-bold">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Produktif</a>
+        </div>
+    </div>
+
+
+    <main class="py-16">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-black text-white">Pemoles CV Cerdas (AI Reviewer)</h1>
+                <p class="mt-4 text-lg text-slate-400">Unggah CV-mu dalam format PDF dan biarkan AI mengubahnya jadi 'luar biasa' dalam hitungan detik.</p>
+            </div>
+
+            <div class="glass-card p-8 md:p-12 rounded-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center">
+                    <div>
+                        <h2 class="text-2xl font-bold text-white mb-4">Unggah CV Kamu (PDF)</h2>
+                        <div class="w-full bg-slate-800 border-2 border-dashed border-slate-700 rounded-lg p-8 text-center">
+                           <i data-lucide="file-up" class="w-12 h-12 text-slate-500 mx-auto mb-4"></i>
+                           <label for="cv-upload" class="cursor-pointer bg-sky-500 text-white font-bold py-2 px-4 rounded-lg hover:bg-sky-600 transition-colors">Pilih File PDF</label>
+                           <input type="file" id="cv-upload" class="hidden" accept=".pdf">
+                           <p id="file-name-display" class="text-sm text-slate-400 mt-4 h-5"></p>
+                        </div>
+                    </div>
+
+                    <div class="text-center">
+                        <button id="polish-btn" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 flex items-center justify-center mx-auto">
+                            <span id="btn-text">✨ Poles dengan AI</span>
+                            <div id="btn-loader" class="hidden w-6 h-6 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="result-container" class="hidden mt-12 pt-8 border-t-2 border-dashed border-slate-700 result-container">
+                    <h2 class="text-3xl font-bold text-white text-center mb-8">Hasil Poles dari AI</h2>
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                        <div class="bg-slate-800/50 p-6 rounded-lg">
+                            <h3 class="font-bold text-sky-400 mb-4 text-lg flex items-center"><i data-lucide="sparkles" class="w-5 h-5 mr-2"></i>Versi yang Disempurnakan</h3>
+                            <p id="polished-output" class="text-slate-300 italic mb-6"></p>
+
+                            <div class="mt-6 pt-4 border-t border-slate-700">
+                                 <h4 class="font-bold text-yellow-400 mb-2 text-md flex items-center"><i data-lucide="alert-triangle" class="w-4 h-4 mr-2"></i>Kritik & Saran Profesional</h4>
+                                 <ul id="critique-output" class="space-y-2 text-slate-400 text-sm">
+                                     </ul>
+                            </div>
+                        </div>
+                        <div class="bg-slate-800/50 p-6 rounded-lg">
+                            <h3 class="font-bold text-green-400 mb-4 text-lg flex items-center"><i data-lucide="lightbulb" class="w-5 h-5 mr-2"></i>Kenapa Ini Lebih Baik?</h3>
+                            <ul id="analysis-output" class="space-y-3 text-slate-400 text-sm">
+                                </ul>
+                        </div>
+                    </div>
+
+                    <div id="job-scout-section" class="mt-12 text-center">
+                        <button id="job-scout-btn" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center shrink-0 mx-auto">
+                            <span id="job-scout-btn-text">🔍 Cari Lowongan Sesuai CV Ini (dengan AI)</span>
+                            <div id="job-scout-btn-loader" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                        <div id="job-links-output" class="mt-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 text-left">
+                            </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+<script type="module"> // *** UBAH MENJADI type="module" ***
+// ===== MULAI SCRIPT BARU =====
+
+// --- Impor Firebase (BARU) ---
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+const firebaseConfig = { // Salin dari HalamanUtama.html
+      apiKey: "AIzaSyBZpVN-dFVngkxe6obg3hCeKyPniJb0__Y",
+      authDomain: "project-1-lebih-baik.firebaseapp.com",
+      projectId: "project-1-lebih-baik",
+      storageBucket: "project-1-lebih-baik.firebasestorage.app",
+      messagingSenderId: "153004966709",
+      appId: "1:153004966709:web:9f98e0ba16ae35b18ec27c"
+};
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (e) {
+    if (window.firebase?.apps?.length) { 
+        app = window.firebase.app();
+    } else {
+         console.error("Critical Firebase Initialization Error:", e);
+    }
+}
+const auth = getAuth(app);
+// --- Akhir Impor Firebase ---
+
+
+lucide.createIcons();
+
+// --- Basic UI Setup ---
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('hidden'));
+document.getElementById('close-mobile-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+// --- Logika Auth & API (BARU) ---
+const BACKEND_URL = "http://localhost:3000";
+
+async function getAuthToken() {
+    await auth.authStateReady(); 
+    const user = auth.currentUser;
+    if (!user || user.isAnonymous) {
+        alert("Anda harus login dulu untuk mengakses halaman ini.");
+        window.location.href = "HalamanUtama.html";
+        return null;
+    }
+    try {
+        const token = await user.getIdToken(true); 
+        sessionStorage.setItem('firebaseIdToken', token);
+        return token;
+    } catch (error) {
+        console.error("Gagal mendapatkan token:", error);
+        sessionStorage.removeItem('firebaseIdToken');
+        window.location.href = 'HalamanUtama.html';
+        return null;
+    }
+}
+// --- Akhir Logika Auth & API ---
+
+
+// --- CV Polisher Logic (DIMODIFIKASI) ---
+const el = {
+    cvUpload: document.getElementById('cv-upload'),
+    fileNameDisplay: document.getElementById('file-name-display'),
+    polishBtn: document.getElementById('polish-btn'),
+    btnText: document.getElementById('btn-text'),
+    btnLoader: document.getElementById('btn-loader'),
+    resultContainer: document.getElementById('result-container'),
+    polishedOutput: document.getElementById('polished-output'),
+    critiqueOutput: document.getElementById('critique-output'),
+    analysisOutput: document.getElementById('analysis-output'),
+    jobScoutBtn: document.getElementById('job-scout-btn'),
+    jobScoutBtnText: document.getElementById('job-scout-btn-text'),
+    jobScoutBtnLoader: document.getElementById('job-scout-btn-loader'),
+    jobLinksOutput: document.getElementById('job-links-output'),
+};
+
+let selectedCvFile = null; // Ganti pdfTextContent menjadi selectedCvFile
+
+// (DIMODIFIKASI) Event listener untuk upload file (Hapus pdf.js)
+el.cvUpload.addEventListener('change', (event) => {
+    const file = event.target.files[0];
+    if (!file) {
+        selectedCvFile = null;
+        el.fileNameDisplay.textContent = '';
+        return;
+    }
+
+    if (file.type !== 'application/pdf') {
+        alert('Hanya file PDF yang diizinkan!');
+        el.cvUpload.value = '';
+        selectedCvFile = null;
+        el.fileNameDisplay.textContent = 'Gagal: File bukan PDF.';
+        return;
+    }
+
+    selectedCvFile = file; // Simpan objek filenya
+    el.fileNameDisplay.textContent = file.name;
+});
+
+
+// (DIMODIFIKASI) Event listener untuk tombol 'Poles CV'
+el.polishBtn.addEventListener('click', async () => {
+    if (!selectedCvFile) {
+        alert("Tolong unggah file CV dalam format PDF dulu ya.");
+        return;
+    }
+    
+    let token;
+    try {
+        token = await getAuthToken();
+        if (!token) throw new Error("Token tidak tersedia");
+    } catch(e) { return; } // Gagal dapat token (sudah di-handle)
+
+    el.btnText.classList.add('hidden');
+    el.btnLoader.classList.remove('hidden');
+    el.polishBtn.disabled = true;
+    el.resultContainer.classList.add('hidden');
+
+    try {
+        // Buat FormData untuk mengirim file
+        const formData = new FormData();
+        formData.append('cvFile', selectedCvFile); // 'cvFile' harus sama dengan di backend
+        formData.append('promptId', 'polish'); // Kirim ID prompt
+
+        const apiUrl = `${BACKEND_URL}/api/v1/process-cv`; // URL API Upload
+
+        // Kirim sebagai FormData (JANGAN set Content-Type, browser akan otomatis)
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 
+                'Authorization': `Bearer ${token}` // Hanya kirim token
+            },
+            body: formData // Kirim FormData
+        });
+
+        if (!response.ok) {
+             if (response.status === 401 || response.status === 403) {
+                 alert("Sesi Anda berakhir. Silakan login ulang.");
+                 window.location.href = 'HalamanUtama.html';
+                 return;
+             }
+             const errorData = await response.json(); // Ambil pesan error dari backend
+             throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        // Respons dari backend kita adalah respons Google AI
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (text) {
+            const cleanedText = text.replace(/```json\n|```/g, '').trim();
+            const result = JSON.parse(cleanedText);
+
+            el.polishedOutput.textContent = result.versi_baru;
+            el.analysisOutput.innerHTML = result.poin_perbaikan.map(point => `<li>${point}</li>`).join('');
+
+            if (result.kritik_saran && result.kritik_saran.length > 0) {
+                el.critiqueOutput.innerHTML = result.kritik_saran.map(point => `<li>- ${point}</li>`).join('');
+            } else {
+                el.critiqueOutput.innerHTML = '';
+            }
+
+            el.resultContainer.classList.remove('hidden');
+        } else {
+            throw new Error("Tidak ada konten dari AI.");
+        }
+
+    } catch (error) {
+        console.error("Error calling process-cv API:", error);
+        el.polishedOutput.textContent = "Waduh, ada sedikit gangguan teknis.";
+        el.analysisOutput.innerHTML = `<li>Error: ${error.message}</li>`;
+        el.critiqueOutput.innerHTML = `<li>Pastikan format CV Anda mudah dibaca.</li>`;
+        el.resultContainer.classList.remove('hidden');
+    } finally {
+        el.btnText.classList.remove('hidden');
+        el.btnLoader.classList.add('hidden');
+        el.polishBtn.disabled = false;
+    }
+});
+
+// (DIMODIFIKASI) Event listener untuk tombol 'Cari Lowongan'
+el.jobScoutBtn.addEventListener('click', async () => {
+    if (!selectedCvFile) {
+        alert("Tolong unggah file CV dalam format PDF dulu ya.");
+        return;
+    }
+
+    let token;
+    try {
+        token = await getAuthToken();
+        if (!token) throw new Error("Token tidak tersedia");
+    } catch(e) { return; } // Gagal dapat token
+
+    el.jobScoutBtnText.classList.add('hidden');
+    el.jobScoutBtnLoader.classList.remove('hidden');
+    el.jobScoutBtn.disabled = true;
+    el.jobLinksOutput.innerHTML = '';
+
+    try {
+        // Buat FormData untuk mengirim file
+        const formData = new FormData();
+        formData.append('cvFile', selectedCvFile);
+        formData.append('promptId', 'job-scout'); // Kirim ID prompt
+
+        const apiUrl = `${BACKEND_URL}/api/v1/process-cv`; // URL API Upload
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 
+                'Authorization': `Bearer ${token}`
+            },
+            body: formData
+        });
+
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                 alert("Sesi Anda berakhir. Silakan login ulang.");
+                 window.location.href = 'HalamanUtama.html';
+                 return;
+             }
+             const errorData = await response.json();
+             throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (text) {
+            const cleanedText = text.replace(/```json\n|```/g, '').trim();
+            const links = JSON.parse(cleanedText);
+
+            if (Array.isArray(links)) {
+                links.forEach(link => {
+                    const card = document.createElement('a');
+                    card.href = link.search_link;
+                    card.target = "_blank";
+                    card.className = "block bg-slate-800/50 p-4 rounded-lg hover:bg-sky-900/50 transition-colors";
+                    card.innerHTML = `
+                        <p class="font-bold text-white">${link.portal_name}</p>
+                        <p class="text-sm text-sky-400">Lihat lowongan relevan &rarr;</p>
+                    `;
+                    el.jobLinksOutput.appendChild(card);
+                });
+            }
+        } else {
+            throw new Error("Tidak ada konten dari AI.");
+        }
+
+    } catch (error) {
+        console.error("Error calling Job Scout API:", error);
+        el.jobLinksOutput.innerHTML = `<p class="text-red-400 text-center col-span-full">Gagal mencari lowongan. Error: ${error.message}</p>`;
+    } finally {
+        el.jobScoutBtnText.classList.remove('hidden');
+        el.jobScoutBtnLoader.classList.add('hidden');
+        el.jobScoutBtn.disabled = false;
+    }
+});
+
+// --- Initialization ---
+document.addEventListener('DOMContentLoaded', async () => { 
+    try {
+        await getAuthToken(); // Cek token saat load
+    } catch(e) {
+        // Error sudah dihandle di getAuthToken (menampilkan pesan error)
+    } finally {
+        lucide.createIcons();
+    }
+});
+
+// ===== AKHIR SCRIPT BARU =====
+</script>
+</body>
+</html>

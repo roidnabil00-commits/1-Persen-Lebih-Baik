@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool: Blueprint Pemasaran - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3, h4 { font-weight: 900; }
+        .era-card {
+            transition: all 0.3s ease-in-out;
+        }
+        .ai-response ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            margin-left: 1rem;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <header class="bg-slate-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-slate-300 hover:text-sky-400 transition">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-slate-300 hover:text-sky-400 transition">Produktif</a>
+                </nav>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+     <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+            <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-white font-bold">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Produktif</a>
+        </div>
+    </div>
+
+    <main class="py-16">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl md:text-5xl font-black text-white">Blueprint Marketing: Strategi Jitu Biar Bisnis Laris</h1>
+                <p class="mt-4 text-lg text-slate-400">Pahami evolusi strategi marketing dari dulu sampai sekarang biar kamu nggak salah langkah.</p>
+            </div>
+
+            <div id="eras-container" class="space-y-8 mb-24">
+                </div>
+
+            <section id="ai-strategist" class="mt-24 pt-16 border-t border-slate-700">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl md:text-4xl font-black text-white">
+                        Yuk, Buat Strategi Marketing Bisnis Kamu
+                    </h2>
+                    <p class="mt-4 max-w-2xl mx-auto text-lg text-slate-400">
+                       Bingung gimana cara masarin bisnismu? Tanya di sini dan dapatkan poin-poin penting yang bisa langsung kamu coba.
+                    </p>
+                </div>
+
+                <div class="max-w-2xl mx-auto">
+                    <div class="glass-card p-8 rounded-2xl">
+                        <textarea id="ai-prompt" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-4 text-white placeholder-slate-500 focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Cth: Bagaimana cara marketing bisnis bakso di Instagram?"></textarea>
+                        <button id="generate-strategy-btn" class="mt-4 w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 flex items-center justify-center">
+                            <span id="ai-btn-text">Buatkan Strateginya</span>
+                            <div id="ai-btn-loader" class="hidden w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                        </button>
+                    </div>
+
+                    <div id="ai-result" class="mt-8 hidden">
+                        <div class="glass-card p-8 rounded-2xl">
+                             <h3 class="text-xl font-bold text-white mb-4">Strategi Pemasaran untuk Kamu:</h3>
+                            <div id="ai-output" class="ai-response text-slate-300 space-y-4"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section id="whatsapp-cta" class="mt-24 pt-16 border-t border-slate-700">
+                <div class="glass-card p-8 md:p-12 rounded-2xl text-center max-w-3xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-black text-white">Mau blueprint/ jurus marketing khusus untuk bisnis kamu?</h2>
+                    <p class="mt-4 text-lg text-slate-400">Dapatkan blueprint yang dirancang khusus untuk bisnismu. Isinya bukan cuma teori, tapi trik marketing ala Gen Z yang tinggal kamu lakukan untuk menaikan omset meroket dari jutaan, ratusan juta, hingga milyaran.</p>
+                    <div class="mt-8">
+                        <a href="https://api.whatsapp.com/send/?phone=6281931656410&text&type=phone_number&app_absent=0" target="_blank" class="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105 inline-flex items-center">
+                            <i data-lucide="whatsapp" class="w-6 h-6 mr-3"></i>
+                            <span>Dapetin Blueprint-ku Sekarang</span>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </main>
+<script>
+lucide.createIcons();
+
+// --- Basic UI Setup ---
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('hidden'));
+document.getElementById('close-mobile-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+// --- Marketing Tool Logic ---
+const el = {
+    erasContainer: document.getElementById('eras-container'),
+    // AI Elements
+    aiPrompt: document.getElementById('ai-prompt'),
+    generateStrategyBtn: document.getElementById('generate-strategy-btn'),
+    aiBtnText: document.getElementById('ai-btn-text'),
+    aiBtnLoader: document.getElementById('ai-btn-loader'),
+    aiResult: document.getElementById('ai-result'),
+    aiOutput: document.getElementById('ai-output'),
+};
+
+const marketingEras = [
+    {
+        era: 1.0,
+        title: "Marketing 1.0: Era Produk",
+        summary: "Di era ini, fokus pemasaran sepenuhnya ada pada produk. Asumsinya sederhana: jika kamu membuat produk terbaik dengan fitur paling unggul, pelanggan akan datang dengan sendirinya. Pemasaran lebih bersifat satu arah, di mana perusahaan memberitahu kehebatan produknya tanpa terlalu memikirkan siapa yang mendengarkan. Contoh klasiknya adalah mobil Ford Model T: 'Tersedia dalam warna apa pun, selama warnanya hitam'.",
+        icon: "factory"
+    },
+    {
+        era: 2.0,
+        title: "Marketing 2.0: Era Pelanggan",
+        summary: "Perusahaan mulai sadar bahwa 'satu produk untuk semua' tidak lagi efektif. Fokus bergeser dari produk ke pelanggan. Di sinilah konsep Segmentasi, Targeting, dan Positioning (STP) lahir. Pemasaran mulai menyentuh sisi emosional, mencoba memahami apa yang sebenarnya dibutuhkan dan diinginkan oleh kelompok pelanggan yang spesifik, lalu menciptakan produk dan pesan yang sesuai untuk mereka.",
+        icon: "target"
+    },
+    {
+        era: 3.0,
+        title: "Marketing 3.0: Era Manusia",
+        summary: "Konsumen tidak lagi hanya membeli fungsi, tapi juga nilai-nilai di baliknya. Mereka ingin tahu apakah sebuah brand peduli pada isu sosial atau lingkungan. Pemasaran menjadi lebih 'manusiawi'. Brand dituntut untuk jujur, otentik, dan punya tujuan mulia (purpose) yang lebih besar dari sekadar mencari untung. Kepercayaan dan integritas menjadi mata uang baru.",
+        icon: "heart-handshake"
+    },
+    {
+        era: 4.0,
+        title: "Marketing 4.0: Era Digital & Komunitas",
+        summary: "Lahirnya internet dan media sosial mengubah segalanya. Kekuatan berpindah ke tangan komunitas online. Iklan TV tidak lagi se-efektif dulu karena orang lebih percaya pada review dari teman atau influencer. Konten yang jujur, mentah, dan otentik (seperti User-Generated Content) menjadi raja. Interaksi dua arah di media sosial menjadi kunci untuk membangun loyalitas.",
+        icon: "message-circle"
+    },
+    {
+        era: 5.0,
+        title: "Marketing 5.0: Era AI & Data",
+        summary: "Ini adalah tentang pemanfaatan teknologi untuk 'meniru' kehebatan manusia dalam skala besar. Algoritma AI dan Big Data digunakan untuk memahami perilaku pelanggan secara mendalam dan memberikan pengalaman yang sangat personal. Contoh paling mudah adalah rekomendasi produk di Shopee atau film di Netflix yang terasa 'kamu banget'.",
+        icon: "brain-circuit"
+    },
+    {
+        era: 6.0,
+        title: "Marketing 6.0: Era Imersif",
+        summary: "Batas antara dunia fisik dan digital semakin kabur. Pemasaran di era ini berfokus pada penciptaan pengalaman yang imersif dan menyatu (Online-to-Offline). Contohnya termasuk penggunaan Augmented Reality (AR) untuk 'mencoba' kacamata secara virtual, atau pengalaman berbelanja di dalam game (metaverse). Ini adalah dunia di mana Gen Z merasa paling nyaman.",
+        icon: "box-select"
+    },
+];
+
+function createEraCard(eraData) {
+    return `
+        <div class="era-card glass-card rounded-2xl p-8 flex flex-col md:flex-row items-center gap-8">
+            <div class="w-24 h-24 bg-slate-800/50 rounded-full flex items-center justify-center shrink-0">
+                <i data-lucide="${eraData.icon}" class="w-12 h-12 text-sky-400"></i>
+            </div>
+            <div>
+                <h3 class="text-2xl font-bold text-white mb-2">${eraData.title}</h3>
+                <p class="text-slate-400">${eraData.summary}</p>
+            </div>
+        </div>
+    `;
+}
+
+// Initialize Marketing Eras
+marketingEras.forEach(eraData => {
+    el.erasContainer.innerHTML += createEraCard(eraData);
+});
+lucide.createIcons(); // Re-initialize icons after adding them to the DOM
+
+// --- Gemini AI Strategist Logic ---
+el.generateStrategyBtn.addEventListener('click', async () => {
+    const prompt = el.aiPrompt.value.trim();
+    if (!prompt) {
+        alert("Tolong masukkan pertanyaan spesifik tentang bisnismu.");
+        return;
+    }
+
+    // *** MODIFIKASI 1: Cek Token ***
+    const token = sessionStorage.getItem('firebaseIdToken');
+    if (!token) {
+        alert("Anda harus login dulu untuk menggunakan fitur ini.");
+        // Opsional: Redirect ke halaman login
+        // window.location.href = 'HalamanUtama.html'; 
+        return;
+    }
+
+    el.aiBtnText.classList.add('hidden');
+    el.aiBtnLoader.classList.remove('hidden');
+    el.generateStrategyBtn.disabled = true;
+    el.aiResult.classList.add('hidden');
+
+    try {
+        const fullPrompt = `
+            Kamu adalah seorang marketing strategist yang praktis, santai, dan to the point.
+            Berdasarkan pertanyaan ini: "${prompt}"
+
+            Berikan jawaban HANYA dalam bentuk poin-poin penting yang harus dilakukan. JANGAN gunakan basa-basi, kalimat pembuka, atau penutup.
+            Gunakan format daftar bernomor. Setiap poin harus singkat dan jelas.
+            Contoh format jawaban:
+            1. Lakukan riset target pasar spesifik.
+            2. Buat konten video pendek di TikTok/Reels.
+            3. Ajak kolaborasi influencer lokal.
+
+            Pastikan jawabanmu bersih dari karakter aneh seperti *, #, }, [, atau ].
+        `;
+
+        const apiUrl = `http://localhost:3000/api/v1/generate`; // <-- URL Backend
+        const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
+
+        // *** MODIFIKASI 2: Tambahkan Header Authorization ***
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // <-- Tambahkan header ini
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+
+        const data = await response.json();
+        let text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+
+        if (text) {
+            // Clean the response text from any unwanted characters
+            const cleanedText = text.replace(/[*#\[\]{}]/g, '').trim();
+            // Format for HTML display (e.g., convert newlines to <br>)
+            const htmlText = cleanedText.replace(/\n/g, '<br>');
+
+            el.aiOutput.innerHTML = htmlText;
+            el.aiResult.classList.remove('hidden');
+        } else {
+            throw new Error("No content from AI.");
+        }
+
+    } catch (error) {
+        console.error("Error calling Gemini API:", error);
+        el.aiOutput.innerHTML = `<p class="text-red-400">Waduh, ada gangguan teknis. Coba lagi nanti ya. Error: ${error.message}</p>`;
+        el.aiResult.classList.remove('hidden');
+    } finally {
+        el.aiBtnText.classList.remove('hidden');
+        el.aiBtnLoader.classList.add('hidden');
+        el.generateStrategyBtn.disabled = false;
+    }
+});
+</script>
+</body>
+</html>

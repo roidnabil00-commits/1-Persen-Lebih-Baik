@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool: Peta Cara Mulai Bisnis - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display.swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3 { font-weight: 900; }
+        .step-container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .progress-bar-step {
+            transition: all 0.4s ease-in-out;
+        }
+        /* Tambahkan style untuk hidden */
+        .hidden {
+            display: none;
+        }
+        /* Style untuk animate-fade-in (digunakan oleh addConnectionRow) */
+        @keyframes fade-in-anim {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .animate-fade-in {
+            animation: fade-in-anim 0.3s ease-out;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <header class="bg-slate-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-slate-300 hover:text-sky-400 transition">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-slate-300 hover:text-sky-400 transition">Produktif</a>
+                </nav>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+     <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+            <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-white font-bold">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Produktif</a>
+        </div>
+    </div>
+
+
+    <main class="py-16">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-black text-white">Peta Cara Mulai Bisnis</h1>
+                <p class="mt-4 text-lg text-slate-400">Setiap bisnis besar dimulai dari apa yang sudah kamu punya. Mari kita petakan 'harta karun'-mu.</p>
+            </div>
+
+            <div class="flex justify-between items-start mb-12 max-w-4xl mx-auto">
+                <div class="flex flex-col items-center text-center w-20">
+                    <div id="progress-step-1" class="progress-bar-step w-10 h-10 rounded-full flex items-center justify-center bg-sky-500 text-white font-bold">1</div>
+                    <p id="progress-label-1" class="mt-2 text-xs text-sky-400">Cerita Diri</p>
+                </div>
+                <div class="flex-grow h-1 bg-slate-700 mx-2 mt-5"></div>
+                <div class="flex flex-col items-center text-center w-20">
+                    <div id="progress-step-2" class="progress-bar-step w-10 h-10 rounded-full flex items-center justify-center bg-slate-700 text-slate-400 font-bold">2</div>
+                    <p id="progress-label-2" class="mt-2 text-xs text-slate-500">Konteks & Risiko</p>
+                </div>
+                <div class="flex-grow h-1 bg-slate-700 mx-2 mt-5"></div>
+                <div class="flex flex-col items-center text-center w-20">
+                    <div id="progress-step-3" class="progress-bar-step w-10 h-10 rounded-full flex items-center justify-center bg-slate-700 text-slate-400 font-bold">3</div>
+                    <p id="progress-label-3" class="mt-2 text-xs text-slate-500">Sumber Daya</p>
+                </div>
+                <div class="flex-grow h-1 bg-slate-700 mx-2 mt-5"></div>
+                <div class="flex flex-col items-center text-center w-20">
+                    <div id="progress-step-4" class="progress-bar-step w-10 h-10 rounded-full flex items-center justify-center bg-slate-700 text-slate-400 font-bold">4</div>
+                    <p id="progress-label-4" class="mt-2 text-xs text-slate-500">Koneksi</p>
+                </div>
+                <div class="flex-grow h-1 bg-slate-700 mx-2 mt-5"></div>
+                <div class="flex flex-col items-center text-center w-20">
+                    <div id="progress-step-5" class="progress-bar-step w-10 h-10 rounded-full flex items-center justify-center bg-slate-700 text-slate-400 font-bold">5</div>
+                    <p id="progress-label-5" class="mt-2 text-xs text-slate-500">Peluang</p>
+                </div>
+                <div class="flex-grow h-1 bg-slate-700 mx-2 mt-5"></div>
+                <div class="flex flex-col items-center text-center w-20">
+                    <div id="progress-step-6" class="progress-bar-step w-10 h-10 rounded-full flex items-center justify-center bg-slate-700 text-slate-400 font-bold"><i data-lucide="flag"></i></div>
+                    <p id="progress-label-6" class="mt-2 text-xs text-slate-500">Blueprint</p>
+                </div>
+            </div>
+
+            <div id="loading-data" class="text-center py-10">
+                <p class="text-slate-400">Memuat data peta bisnis Anda...</p>
+            </div>
+
+            <div id="main-content" class="hidden"> <div class="glass-card p-8 md:p-12 rounded-2xl">
+                    <div id="step-1" class="step-container">
+                        <h2 class="text-2xl font-bold text-white mb-6">Langkah 1: Ceritakan Tentang Dirimu</h2>
+                        <p class="text-slate-400 mb-4">Ini bagian terpenting. Lupakan sejenak soal bisnis. Ceritakan tentang dirimu, apa hobimu, apa yang membuatmu semangat, pengalaman unik, atau hal yang paling kamu kuasai di luar pekerjaan.</p>
+                        <div>
+                            <label for="personal-story" class="block text-sm font-medium text-slate-300 mb-2">Cerita, Hobi, Passion Kamu:</label>
+                            <textarea id="personal-story" rows="6" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Dari kecil aku udah suka banget sama dunia masak-memasak..."></textarea>
+                        </div>
+                        <div class="mt-8 text-right">
+                            <button id="next-step-1" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">Lanjut ke Konteks & Risiko &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div id="step-2" class="step-container hidden">
+                        <h2 class="text-2xl font-bold text-white mb-6">Langkah 2: Konteks & Profil Risiko Kamu</h2>
+                        <p class="text-slate-400 mb-6">Jawaban jujur di sini akan membantu AI memberikan saran yang lebih aman dan realistis untukmu.</p>
+                        <div class="space-y-6">
+                            <div>
+                                <label for="current-activity" class="block text-sm font-medium text-slate-300 mb-2">Apa kegiatan utamamu saat ini?</label>
+                                <input type="text" id="current-activity" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Cth: Karyawan swasta, Mahasiswa, Freelancer, Ibu rumah tangga">
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="marital-status" class="block text-sm font-medium text-slate-300 mb-2">Status Pernikahan</label>
+                                    <select id="marital-status" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                        <option>Belum Menikah</option>
+                                        <option>Menikah</option>
+                                        <option>Menikah (dengan tanggungan)</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label for="emergency-fund" class="block text-sm font-medium text-slate-300 mb-2">Apakah punya dana darurat?</label>
+                                    <select id="emergency-fund" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                        <option>Punya (lebih dari 6 bulan pengeluaran)</option>
+                                        <option>Punya (cukup untuk 3-6 bulan)</option>
+                                        <option>Punya (kurang dari 3 bulan)</option>
+                                        <option>Belum Punya</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button id="prev-step-2" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">&larr; Kembali</button>
+                            <button id="next-step-2" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">Lanjut ke Sumber Daya &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div id="step-3" class="step-container hidden">
+                        <h2 class="text-2xl font-bold text-white mb-6">Langkah 3: Petakan Sumber Daya Internal Kamu</h2>
+                        <div class="space-y-6">
+                            <div>
+                                <label for="skill" class="block text-sm font-medium text-slate-300 mb-2">Skill apa yang kamu punya sekarang?</label>
+                                <textarea id="skill" rows="3" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Cth: Public speaking, desain grafis, jago masak, edit video..."></textarea>
+                            </div>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <label for="capital" class="block text-sm font-medium text-slate-300 mb-2">Modal Uang (Rp)</label>
+                                    <input type="number" id="capital" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="5000000">
+                                </div>
+                                <div>
+                                    <label for="time" class="block text-sm font-medium text-slate-300 mb-2">Alokasi Waktu / Minggu</label>
+                                    <input type="text" id="time" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Cth: 10 jam, Sabtu & Minggu">
+                                </div>
+                            </div>
+                            <div>
+                                <label for="knowledge" class="block text-sm font-medium text-slate-300 mb-2">Pengetahuan Spesifik / Minat</label>
+                                <textarea id="knowledge" rows="2" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Contoh: Pemahaman pasar saham, keahlian resep kuliner, analisis tren fashion..."></textarea>
+                            </div>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button id="prev-step-3" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">&larr; Kembali</button>
+                            <button id="next-step-3" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">Lanjut ke Koneksi &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div id="step-4" class="step-container hidden">
+                        <h2 class="text-2xl font-bold text-white mb-6">Langkah 4: Petakan Jaringan Koneksi Kamu</h2>
+                        <p class="text-slate-400 mb-6">Ini adalah aset terpentingmu. Jangan remehkan siapapun yang kamu kenal.</p>
+                        <div id="connections-list" class="space-y-4"></div>
+                        <button id="add-connection" class="mt-4 text-sky-400 hover:text-sky-300 text-sm font-semibold flex items-center space-x-2">
+                            <i data-lucide="plus-circle" class="w-4 h-4"></i>
+                            <span>Tambah Koneksi</span>
+                        </button>
+                        <div class="mt-8 flex justify-between">
+                            <button id="prev-step-4" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">&larr; Kembali</button>
+                            <button id="next-step-4" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">Lanjut ke Peluang &rarr;</button>
+                        </div>
+                    </div>
+
+                    <div id="step-5" class="step-container hidden">
+                        <h2 class="text-2xl font-bold text-white mb-6">Langkah 5: Identifikasi Peluang & Masalah</h2>
+                        <p class="text-slate-400 mb-4">Sekarang, tulis semua peluang, masalah, atau ide acak yang kamu lihat di sekitarmu.</p>
+                        <div>
+                            <label for="opportunities" class="block text-sm font-medium text-slate-300 mb-2">Daftar Peluang / Masalah / Ide</label>
+                            <textarea id="opportunities" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Cth: Banyak teman kantor butuh katering sehat, di komplek belum ada laundry kiloan, tren AI lagi naik..."></textarea>
+                        </div>
+                        <div class="mt-8 flex justify-between">
+                            <button id="prev-step-5" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">&larr; Kembali</button>
+                            <button id="finish-button" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">Lihat Blueprint Bisnis Kamu!</button>
+                        </div>
+                    </div>
+                    
+                    <div id="step-6" class="step-container hidden">
+                         <h2 class="text-3xl font-bold text-white text-center mb-2">Blueprint Bisnis Pertamamu</h2>
+                         <p class="text-slate-400 mb-8 text-center">Ini adalah rangkuman dari aset dan arena bermain yang kamu miliki. Gunakan ini sebagai fondasi.</p>
+                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                             <div class="bg-slate-800/50 p-6 rounded-lg">
+                                 <h3 class="font-bold text-sky-400 mb-4 text-lg flex items-center"><i data-lucide="archive" class="w-5 h-5 mr-2"></i>Aset Kamu</h3>
+                                 <div class="space-y-4 text-sm">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-300">Cerita & Passion Kamu:</h4>
+                                        <p id="summary-story" class="text-slate-400 whitespace-pre-wrap"></p>
+                                    </div>
+                                     <div>
+                                        <h4 class="font-semibold text-slate-300">Profil Risiko:</h4>
+                                        <p id="summary-risk" class="text-slate-400 whitespace-pre-wrap"></p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-300">Skill Andalan:</h4>
+                                        <p id="summary-skill" class="text-slate-400 whitespace-pre-wrap"></p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-300">Modal & Waktu:</h4>
+                                        <p id="summary-capital-time" class="text-slate-400"></p>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-semibold text-slate-300">Pengetahuan Spesifik:</h4>
+                                        <p id="summary-knowledge" class="text-slate-400 whitespace-pre-wrap"></p>
+                                    </div>
+                                     <div>
+                                        <h4 class="font-semibold text-slate-300">Jaringan Koneksi:</h4>
+                                        <ul id="summary-connections" class="list-disc list-inside text-slate-400"></ul>
+                                    </div>
+                                 </div>
+                             </div>
+                              <div class="bg-slate-800/50 p-6 rounded-lg">
+                                <h3 class="font-bold text-orange-400 mb-4 text-lg flex items-center"><i data-lucide="telescope" class="w-5 h-5 mr-2"></i>Arena Bermain</h3>
+                                 <div class="space-y-4 text-sm">
+                                    <div>
+                                        <h4 class="font-semibold text-slate-300">Peluang & Masalah yang Kamu Lihat:</h4>
+                                        <p id="summary-opportunities" class="text-slate-400 whitespace-pre-wrap"></p>
+                                    </div>
+                                 </div>
+                            </div>
+                         </div>
+                         <div class="mt-8 border-2 border-dashed border-slate-600 rounded-lg p-6">
+                             <h3 class="text-xl font-bold text-white text-center">Hubungkan Titik-titiknya!</h3>
+                             <div class="text-center my-4">
+                                 <button id="ai-idea-button" class="bg-sky-800/50 hover:bg-sky-700/50 text-sky-300 font-semibold py-2 px-5 rounded-lg transition-all duration-300 flex items-center justify-center shrink-0 mx-auto">
+                                    <span id="ai-idea-btn-text">✨ Minta 3 Ide Bisnis dari AI</span>
+                                    <div id="ai-idea-btn-loader" class="hidden w-5 h-5 border-2 border-sky-300 border-t-transparent rounded-full animate-spin"></div>
+                                 </button>
+                             </div>
+                             <textarea id="business-idea" rows="5" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 mt-4 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Tulis ide bisnismu di sini, atau biarkan AI membantumu..."></textarea>
+                             <div id="ai-validation-area" class="text-left mt-4 text-slate-300 space-y-4"></div>
+                             <div class="text-center mt-4">
+                                <button id="ai-validate-button" class="bg-green-800/50 hover:bg-green-700/50 text-green-300 font-semibold py-2 px-5 rounded-lg transition-all duration-300 flex items-center justify-center shrink-0 mx-auto">
+                                    <span id="ai-validate-btn-text">🔍 Validasi Cepat Ide Ini</span>
+                                    <div id="ai-validate-btn-loader" class="hidden w-5 h-5 border-2 border-green-300 border-t-transparent rounded-full animate-spin"></div>
+                                </button>
+                             </div>
+                         </div>
+                          <div class="mt-8 flex justify-between">
+                            <button id="prev-step-6" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300">&larr; Kembali</button>
+                            <button onclick="window.print()" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg transition-all duration-300 flex items-center space-x-2"><i data-lucide="printer"></i><span>Simpan / Cetak</span></button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+<script type="module"> // *** UBAH MENJADI type="module" ***
+// ===== MULAI SCRIPT BARU =====
+
+// --- Impor Firebase (BARU) ---
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+const firebaseConfig = { // Salin dari HalamanUtama.html
+      apiKey: "AIzaSyBZpVN-dFVngkxe6obg3hCeKyPniJb0__Y",
+      authDomain: "project-1-lebih-baik.firebaseapp.com",
+      projectId: "project-1-lebih-baik",
+      storageBucket: "project-1-lebih-baik.firebasestorage.app",
+      messagingSenderId: "153004966709",
+      appId: "1:153004966709:web:9f98e0ba16ae35b18ec27c"
+};
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (e) {
+    if (window.firebase?.apps?.length) { 
+        app = window.firebase.app();
+    } else {
+         console.error("Critical Firebase Initialization Error:", e);
+    }
+}
+const auth = getAuth(app);
+// --- Akhir Impor Firebase ---
+
+
+lucide.createIcons();
+
+// --- Basic UI Setup ---
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('hidden'));
+document.getElementById('close-mobile-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+// --- Logika Auth & API (BARU) ---
+const BACKEND_URL = "http://localhost:3000";
+
+async function getAuthToken() {
+    await auth.authStateReady(); 
+    const user = auth.currentUser;
+    if (!user || user.isAnonymous) {
+        alert("Anda harus login dulu untuk mengakses halaman ini.");
+        window.location.href = "HalamanUtama.html";
+        return null;
+    }
+    try {
+        const token = await user.getIdToken(true); 
+        sessionStorage.setItem('firebaseIdToken', token);
+        return token;
+    } catch (error) {
+        console.error("Gagal mendapatkan token:", error);
+        sessionStorage.removeItem('firebaseIdToken');
+        window.location.href = 'HalamanUtama.html';
+        return null;
+    }
+}
+
+async function getAuthHeaders() {
+    const token = await getAuthToken();
+    if (!token) {
+        throw new Error("Token tidak tersedia");
+    }
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
+// --- Akhir Logika Auth & API ---
+
+
+// --- Multi-step Form Logic ---
+const el = {
+    steps: [document.getElementById('step-1'), document.getElementById('step-2'), document.getElementById('step-3'), document.getElementById('step-4'), document.getElementById('step-5'), document.getElementById('step-6')],
+    progressSteps: [document.getElementById('progress-step-1'), document.getElementById('progress-step-2'), document.getElementById('progress-step-3'), document.getElementById('progress-step-4'), document.getElementById('progress-step-5'), document.getElementById('progress-step-6')],
+    progressLabels: [document.getElementById('progress-label-1'), document.getElementById('progress-label-2'), document.getElementById('progress-label-3'), document.getElementById('progress-label-4'), document.getElementById('progress-label-5'), document.getElementById('progress-label-6')],
+    
+    loadingData: document.getElementById('loading-data'), // (BARU)
+    mainContent: document.getElementById('main-content'), // (BARU)
+
+    // Step 1
+    personalStory: document.getElementById('personal-story'),
+    nextStep1: document.getElementById('next-step-1'),
+    
+    // Step 2
+    currentActivity: document.getElementById('current-activity'),
+    maritalStatus: document.getElementById('marital-status'),
+    emergencyFund: document.getElementById('emergency-fund'),
+    prevStep2: document.getElementById('prev-step-2'),
+    nextStep2: document.getElementById('next-step-2'),
+    
+    // Step 3
+    skill: document.getElementById('skill'),
+    capital: document.getElementById('capital'),
+    time: document.getElementById('time'),
+    knowledge: document.getElementById('knowledge'),
+    prevStep3: document.getElementById('prev-step-3'),
+    nextStep3: document.getElementById('next-step-3'),
+
+    // Step 4
+    connectionsList: document.getElementById('connections-list'),
+    addConnectionBtn: document.getElementById('add-connection'),
+    prevStep4: document.getElementById('prev-step-4'),
+    nextStep4: document.getElementById('next-step-4'),
+    
+    // Step 5
+    opportunities: document.getElementById('opportunities'),
+    prevStep5: document.getElementById('prev-step-5'),
+    finishButton: document.getElementById('finish-button'),
+
+    // Step 6
+    prevStep6: document.getElementById('prev-step-6'),
+    summaryStory: document.getElementById('summary-story'),
+    summaryRisk: document.getElementById('summary-risk'),
+    summarySkill: document.getElementById('summary-skill'),
+    summaryCapitalTime: document.getElementById('summary-capital-time'),
+    summaryKnowledge: document.getElementById('summary-knowledge'),
+    summaryConnections: document.getElementById('summary-connections'),
+    summaryOpportunities: document.getElementById('summary-opportunities'),
+    businessIdea: document.getElementById('business-idea'),
+    
+    // AI Buttons
+    aiIdeaButton: document.getElementById('ai-idea-button'),
+    aiIdeaBtnText: document.getElementById('ai-idea-btn-text'),
+    aiIdeaBtnLoader: document.getElementById('ai-idea-btn-loader'),
+    aiValidateButton: document.getElementById('ai-validate-button'),
+    aiValidateBtnText: document.getElementById('ai-validate-btn-text'),
+    aiValidateBtnLoader: document.getElementById('ai-validate-btn-loader'),
+    aiValidationArea: document.getElementById('ai-validation-area'),
+};
+
+let currentStep = 1;
+let businessData = {
+    personalStory: '',
+    riskProfile: {
+        activity: '',
+        marital: '',
+        fund: ''
+    },
+    skill: '',
+    capital: '',
+    time: '',
+    knowledge: '',
+    connections: [],
+    opportunities: ''
+};
+
+function showStep(stepNumber) {
+    el.steps.forEach((step, index) => {
+        step.classList.toggle('hidden', (index + 1) !== stepNumber);
+    });
+    updateProgressBar(stepNumber);
+}
+
+function updateProgressBar(stepNumber) {
+    el.progressSteps.forEach((step, index) => {
+        if (index < stepNumber) {
+            step.classList.add('bg-sky-500', 'text-white');
+            step.classList.remove('bg-slate-700', 'text-slate-400');
+            el.progressLabels[index].classList.add('text-sky-400');
+            el.progressLabels[index].classList.remove('text-slate-500');
+        } else {
+            step.classList.remove('bg-sky-500', 'text-white');
+            step.classList.add('bg-slate-700', 'text-slate-400');
+            el.progressLabels[index].classList.remove('text-sky-400');
+            el.progressLabels[index].classList.add('text-slate-500');
+        }
+    });
+}
+
+function addConnectionRow(name = '', role = '') {
+    const row = document.createElement('div');
+    row.className = 'flex items-center gap-4 animate-fade-in';
+    row.innerHTML = `
+        <input type="text" class="connection-name w-1/2 bg-slate-800 border border-slate-700 rounded-lg p-2 text-white" placeholder="Nama / Hubungan" value="${name}">
+        <input type="text" class="connection-role w-1/2 bg-slate-800 border border-slate-700 rounded-lg p-2 text-white" placeholder="Profesi / Keahlian" value="${role}">
+        <button class="remove-connection-btn text-red-500 hover:text-red-400 shrink-0"><i data-lucide="x-circle" class="w-5 h-5"></i></button>
+    `;
+    el.connectionsList.appendChild(row);
+    row.querySelector('.remove-connection-btn').addEventListener('click', () => row.remove());
+    lucide.createIcons();
+}
+
+function saveStepData(step) {
+    if (step === 1) {
+        businessData.personalStory = el.personalStory.value;
+    } else if (step === 2) {
+        businessData.riskProfile.activity = el.currentActivity.value;
+        businessData.riskProfile.marital = el.maritalStatus.value;
+        businessData.riskProfile.fund = el.emergencyFund.value;
+    } else if (step === 3) {
+        businessData.skill = el.skill.value;
+        businessData.capital = el.capital.value;
+        businessData.time = el.time.value;
+        businessData.knowledge = el.knowledge.value;
+    } else if (step === 4) {
+        businessData.connections = [];
+        const rows = el.connectionsList.querySelectorAll('.flex.items-center.gap-4'); // Selector lebih spesifik
+        rows.forEach(row => {
+            const nameInput = row.querySelector('.connection-name');
+            const roleInput = row.querySelector('.connection-role');
+            if (nameInput && roleInput) {
+                 const name = nameInput.value;
+                 const role = roleInput.value;
+                 if (name && role) {
+                    businessData.connections.push({ name, role });
+                 }
+            }
+        });
+    } else if (step === 5) {
+        businessData.opportunities = el.opportunities.value;
+    }
+}
+
+// (BARU) Fungsi untuk menyimpan data ke API
+async function saveDataToAPI() {
+    // Pastikan data lokal sudah terupdate
+    saveStepData(1); saveStepData(2); saveStepData(3); saveStepData(4); saveStepData(5);
+    
+    console.log("Menyimpan Peta Bisnis ke API...", businessData);
+    try {
+        const headers = await getAuthHeaders();
+        const response = await fetch(`${BACKEND_URL}/api/v1/business-map`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify(businessData) // Kirim semua data
+        });
+        if (!response.ok) {
+            throw new Error('Gagal menyimpan data peta bisnis');
+        }
+        console.log("Data Peta Bisnis berhasil disimpan.");
+    } catch (error) {
+        console.error("Error menyimpan peta bisnis:", error);
+        if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) {
+            alert("Gagal menyimpan progres Anda. Cek koneksi.");
+        }
+    }
+}
+
+// (BARU) Fungsi untuk memuat data dari API
+async function loadDataFromAPI() {
+    try {
+        const headers = await getAuthHeaders();
+        const response = await fetch(`${BACKEND_URL}/api/v1/business-map`, {
+            headers: headers
+        });
+        if (!response.ok) {
+            throw new Error('Gagal memuat data peta bisnis');
+        }
+        const data = await response.json();
+        
+        // Jika ada data tersimpan, isi formulir
+        if (data && data.id) {
+            console.log("Data Peta Bisnis ditemukan, mengisi formulir...", data);
+            businessData = {
+                personalStory: data.personalStory || '',
+                riskProfile: {
+                    activity: data.currentActivity || '',
+                    marital: data.maritalStatus || 'Belum Menikah',
+                    fund: data.emergencyFund || 'Belum Punya'
+                },
+                skill: data.skill || '',
+                capital: data.capital || '',
+                time: data.time || '',
+                knowledge: data.knowledge || '',
+                connections: Array.isArray(data.connections) ? data.connections : [], // Pastikan 'connections' adalah array
+                opportunities: data.opportunities || ''
+            };
+            
+            // Isi nilai ke elemen HTML
+            el.personalStory.value = businessData.personalStory;
+            el.currentActivity.value = businessData.riskProfile.activity;
+            el.maritalStatus.value = businessData.riskProfile.marital;
+            el.emergencyFund.value = businessData.riskProfile.fund;
+            el.skill.value = businessData.skill;
+            el.capital.value = businessData.capital;
+            el.time.value = businessData.time;
+            el.knowledge.value = businessData.knowledge;
+            el.opportunities.value = businessData.opportunities;
+            
+            // Hapus koneksi default dan isi dengan yang dari DB
+            el.connectionsList.innerHTML = ''; 
+            if (businessData.connections.length > 0) {
+                businessData.connections.forEach(conn => addConnectionRow(conn.name, conn.role));
+            } else {
+                // Jika tidak ada, tambahkan 2 baris kosong (sesuai perilaku default lama)
+                addConnectionRow('Ayah', 'Distributor Semen');
+                addConnectionRow('Budi (Teman Kuliah)', 'Kerja di Bank');
+            }
+            
+        } else {
+            console.log("Tidak ada data peta bisnis tersimpan. Menggunakan default.");
+            // Jika tidak ada data, tambahkan 2 baris koneksi default
+            addConnectionRow('Ayah', 'Distributor Semen');
+            addConnectionRow('Budi (Teman Kuliah)', 'Kerja di Bank');
+        }
+    } catch (error) {
+        console.error("Error memuat peta bisnis:", error);
+        if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) {
+            alert("Gagal memuat data Anda yang tersimpan.");
+        }
+         // Tetap tambahkan koneksi default jika load gagal
+         if (el.connectionsList.innerHTML === '') {
+            addConnectionRow('Ayah', 'Distributor Semen');
+            addConnectionRow('Budi (Teman Kuliah)', 'Kerja di Bank');
+         }
+    } finally {
+        // Tampilkan konten setelah selesai loading (baik sukses atau tidak)
+        el.loadingData.classList.add('hidden');
+        el.mainContent.classList.remove('hidden');
+    }
+}
+
+
+function renderSummary() {
+    el.summaryStory.textContent = businessData.personalStory || '-';
+    el.summaryRisk.textContent = `${businessData.riskProfile.activity || '-'}, ${businessData.riskProfile.marital || '-'}, Dana Darurat: ${businessData.riskProfile.fund || '-'}`;
+    el.summarySkill.textContent = businessData.skill || '-';
+    el.summaryCapitalTime.textContent = `Rp ${Number(businessData.capital || 0).toLocaleString('id-ID')} & ${businessData.time || '-'}`;
+    el.summaryKnowledge.textContent = businessData.knowledge || '-';
+    el.summaryOpportunities.textContent = businessData.opportunities || '-';
+    
+    el.summaryConnections.innerHTML = '';
+    if(businessData.connections.length > 0){
+        businessData.connections.forEach(conn => {
+            const li = document.createElement('li');
+            li.textContent = `${conn.name} (${conn.role})`;
+            el.summaryConnections.appendChild(li);
+        });
+    } else {
+        const li = document.createElement('li');
+        li.textContent = 'Tidak ada koneksi yang ditambahkan.';
+        li.className = 'italic text-slate-500';
+        el.summaryConnections.appendChild(li);
+    }
+}
+
+// Navigation Listeners (DIMODIFIKASI untuk menyimpan data)
+el.nextStep1.addEventListener('click', () => { saveStepData(1); saveDataToAPI(); currentStep = 2; showStep(currentStep); });
+el.prevStep2.addEventListener('click', () => { saveStepData(2); currentStep = 1; showStep(currentStep); });
+el.nextStep2.addEventListener('click', () => { saveStepData(2); saveDataToAPI(); currentStep = 3; showStep(currentStep); });
+el.prevStep3.addEventListener('click', () => { saveStepData(3); currentStep = 2; showStep(currentStep); });
+el.nextStep3.addEventListener('click', () => { saveStepData(3); saveDataToAPI(); currentStep = 4; showStep(currentStep); });
+el.prevStep4.addEventListener('click', () => { saveStepData(4); currentStep = 3; showStep(currentStep); });
+el.nextStep4.addEventListener('click', () => { saveStepData(4); saveDataToAPI(); currentStep = 5; showStep(currentStep); });
+el.prevStep5.addEventListener('click', () => { saveStepData(5); currentStep = 4; showStep(currentStep); });
+el.finishButton.addEventListener('click', () => { saveStepData(5); saveDataToAPI(); renderSummary(); currentStep = 6; showStep(currentStep); });
+el.prevStep6.addEventListener('click', () => { currentStep = 5; showStep(currentStep); });
+
+
+el.addConnectionBtn.addEventListener('click', () => addConnectionRow());
+
+// --- Gemini API Functions (DIMODIFIKASI untuk Auth) ---
+async function callGemini(prompt, button, text, loader, outputElement) {
+    let headers;
+    try {
+         headers = await getAuthHeaders();
+    } catch (e) {
+         alert("Sesi Anda berakhir. Silakan login ulang.");
+         window.location.href = 'HalamanUtama.html';
+         return;
+    }
+
+    text.classList.add('hidden');
+    loader.classList.remove('hidden');
+    button.disabled = true;
+
+    try {
+        const apiUrl = `http://localhost:3000/api/v1/generate`; // <-- URL Backend
+        const payload = { contents: [{ parts: [{ text: prompt }] }] };
+
+        const response = await fetch(apiUrl, {
+            method: 'POST',
+            headers: headers, // <-- Gunakan header baru
+            body: JSON.stringify(payload)
+        });
+
+        if (!response.ok) {
+             if (response.status === 401 || response.status === 403) {
+                 alert("Sesi Anda berakhir. Silakan login ulang.");
+                 window.location.href = 'HalamanUtama.html';
+                 return;
+             }
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        const responseText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        
+        if(responseText) {
+             if (outputElement.tagName === 'TEXTAREA') {
+                const cleanedText = responseText.replace(/\*/g, ''); 
+                outputElement.value = cleanedText;
+            } else {
+                let htmlText = responseText
+                    .replace(/\*\*(.*?)\*\*/g, '<strong class="text-white">$1</strong>') 
+                    .replace(/\*/g, '') 
+                    .replace(/^- /gm, '&bull; ') 
+                    .replace(/\n\n/g, '<br><br>') 
+                    .replace(/\n/g, '<br>'); 
+                outputElement.innerHTML = htmlText;
+            }
+        } else {
+            throw new Error("No content received from AI.");
+        }
+
+    } catch (error) {
+        console.error("Error calling Gemini API:", error);
+         if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) {
+             if (outputElement.tagName === 'TEXTAREA') {
+                outputElement.value = `Waduh, ada gangguan teknis saat menghubungi AI. Coba lagi nanti. Error: ${error.message}`;
+            } else {
+                outputElement.innerHTML = `<p class="text-red-400">Waduh, ada gangguan teknis saat menghubungi AI. Coba lagi nanti. Error: ${error.message}</p>`;
+            }
+         }
+    } finally {
+        text.classList.remove('hidden');
+        loader.classList.add('hidden');
+        button.disabled = false;
+    }
+}
+
+el.aiIdeaButton.addEventListener('click', () => {
+    saveStepData(1); saveStepData(2); saveStepData(3); saveStepData(4); saveStepData(5); // Pastikan data terbaru tersimpan
+    const prompt = `
+        Kamu adalah seorang mentor bisnis... (Prompt Anda yang lama tetap sama)
+        - Cerita & Passion: "${businessData.personalStory}"
+        - Profil Risiko: Aktivitas utama (${businessData.riskProfile.activity}), Status (${businessData.riskProfile.marital}), Dana Darurat (${businessData.riskProfile.fund}).
+        - Skills: "${businessData.skill}"
+        - Modal & Waktu: "Rp ${businessData.capital} & ${businessData.time} per minggu"
+        - Koneksi: ${JSON.stringify(businessData.connections)}
+        - Peluang: "${businessData.opportunities}"
+        ... (Sisa prompt Anda)
+    `;
+    callGemini(prompt, el.aiIdeaButton, el.aiIdeaBtnText, el.aiIdeaBtnLoader, el.businessIdea);
+});
+
+el.aiValidateButton.addEventListener('click', () => {
+    saveStepData(1); saveStepData(2); saveStepData(3); saveStepData(4); saveStepData(5); // Pastikan data terbaru tersimpan
+    const idea = el.businessIdea.value;
+    if (!idea) {
+        alert("Tolong tuliskan dulu ide bisnismu di kolom, atau minta bantuan AI untuk membuat ide.");
+        return;
+    }
+    const prompt = `
+        Kamu adalah seorang business analyst... (Prompt Anda yang lama tetap sama)
+        Konteks pengguna:
+        - Skills: "${businessData.skill}"
+        - Koneksi: ${JSON.stringify(businessData.connections)}
+        - Profil Risiko: Aktivitas utama (${businessData.riskProfile.activity}), Status (${businessData.riskProfile.marital}), Dana Darurat (${businessData.riskProfile.fund}).
+        ... (Sisa prompt Anda)
+    `;
+    el.aiValidationArea.innerHTML = '<p class="text-slate-400">Menganalisis...</p>';
+    callGemini(prompt, el.aiValidateButton, el.aiValidateBtnText, el.aiValidateBtnLoader, el.aiValidationArea);
+});
+
+
+// Initial setup (DIMODIFIKASI untuk Auth dan Load Data)
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        await getAuthToken(); // Cek token, akan redirect jika tidak ada/invalid
+        await loadDataFromAPI(); // Ambil data dari DB dan isi form
+        showStep(currentStep); // Tampilkan step 1
+    } catch (e) {
+        // Error sudah dihandle
+        console.error("Gagal inisialisasi halaman:", e);
+        el.loadingData.classList.add('hidden');
+    }
+});
+
+// ===== AKHIR SCRIPT BARU =====
+</script>
+</body>
+</html>

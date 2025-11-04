@@ -1,0 +1,875 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Produktif - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3 { font-weight: 900; }
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: 60px 1fr;
+            gap: 0;
+        }
+        .time-slot {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            height: 30px; /* 30 minute slot */
+            transition: background-color 0.2s;
+        }
+        .time-slot:hover {
+            background-color: rgba(56, 189, 248, 0.1);
+        }
+        .time-label {
+            font-size: 0.75rem;
+            color: #94a3b8; /* slate-400 */
+            text-align: right;
+            padding-right: 1rem;
+            position: relative;
+            top: -0.5em;
+            height: 60px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .event-block {
+            position: absolute;
+            left: 60px; /* width of time labels */
+            right: 0;
+            background-color: rgba(56, 189, 248, 0.2); /* sky-400/20 */
+            border-left: 3px solid #38bdf8; /* sky-400 */
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            overflow: hidden;
+            z-index: 10;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .event-block:hover {
+            background-color: rgba(56, 189, 248, 0.4);
+        }
+        .fade-in {
+            animation: fadeInAnimation 0.8s ease-in-out forwards;
+        }
+        @keyframes fadeInAnimation {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        /* Style for time input */
+        input[type="time"]::-webkit-calendar-picker-indicator {
+            filter: invert(1);
+        }
+        .half-hour-line {
+            border-top: 1px dotted rgba(255, 255, 255, 0.08);
+        }
+         /* Simple animation for fade-in effect on list items */
+        @keyframes itemFadeIn {
+            from { opacity: 0; transform: translateY(5px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+             animation: itemFadeIn 0.3s ease-out forwards;
+        }
+        /* Ensure hidden class works */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <header id="header" class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-slate-300 hover:text-sky-400 transition">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Produktif</a>
+                </nav>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+            <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-white font-bold">Produktif</a>
+        </div>
+    </div>
+
+
+    <main class="pt-24">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            
+            <div id="start-session" class="max-w-2xl mx-auto text-center py-24 fade-in">
+                <h1 class="text-3xl md:text-5xl font-black text-white mb-4">Mulai Rencana Produktifmu</h1>
+                <p class="text-lg text-slate-400 mb-10">Rencanakan misimu, atur waktumu, dan taklukkan harimu. Satu hari, satu kemajuan.</p>
+                <button id="start-planner-button" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-xl transition-all duration-300 transform hover:scale-105 inline-flex items-center shadow-lg shadow-sky-500/20">
+                    <i data-lucide="play-circle" class="w-6 h-6 mr-3"></i>
+                    <span>Ready For Today</span>
+                </button>
+            </div>
+
+            <div id="planner-container" class="hidden">
+                <h1 class="text-3xl md:text-4xl font-black text-white text-center mb-2">Dasbor Kemenangan Harian</h1>
+                <p id="current-date" class="text-center text-sky-400 mb-12"></p>
+                
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                    <div class="lg:col-span-2">
+                        <div class="glass-card p-6 rounded-2xl mb-8">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center"><i data-lucide="award" class="w-5 h-5 mr-2 text-sky-400"></i>Target Terbesar Kamu Hari Ini</h3>
+                            <div class="flex gap-4">
+                                <input type="text" id="big-win-input" class="w-full bg-slate-800 border-0 rounded-lg p-2 text-slate-300 text-lg focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Apa target terbesarmu hari ini?">
+                                <button id="ai-breakdown-button" class="bg-sky-800/50 hover:bg-sky-700/50 text-sky-300 font-semibold py-2 px-4 rounded-lg transition-all duration-300 flex items-center justify-center shrink-0">
+                                    <span id="ai-btn-text">✨ Pecah Jadi Tugas</span>
+                                    <div id="ai-btn-loader" class="hidden w-5 h-5 border-2 border-sky-300 border-t-transparent rounded-full animate-spin"></div>
+                                </button>
+                            </div>
+                        </div>
+
+                        <div class="glass-card p-6 rounded-2xl mb-8">
+                            <h3 class="text-xl font-bold text-white mb-4 flex items-center"><i data-lucide="check-square" class="w-5 h-5 mr-2 text-sky-400"></i>Checklist Tugas</h3>
+                            <ul id="todo-list" class="space-y-3"></ul>
+                             <div id="ai-feedback" class="text-sm text-green-400 mt-2"></div>
+                            <div class="mt-4">
+                                <div class="flex">
+                                    <input type="text" id="new-todo-input" class="flex-grow bg-slate-800 border border-slate-700 rounded-l-lg px-4 py-2 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Tambah tugas baru...">
+                                    <button id="schedule-new-todo-button" class="bg-slate-700 hover:bg-slate-600 text-slate-300 font-bold py-2 px-3 border-y border-slate-700" title="Jadwalkan Tugas">
+                                        <i data-lucide="calendar-plus"></i>
+                                    </button>
+                                    <button id="add-todo-button" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-r-lg"><i data-lucide="plus"></i></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="review-section" class="glass-card p-6 rounded-2xl">
+                             <h3 class="text-xl font-bold text-white mb-4 flex items-center"><i data-lucide="sunset" class="w-5 h-5 mr-2 text-sky-400"></i>Evaluasi Hari Ini</h3>
+                             <div class="space-y-4">
+                                <div>
+                                    <label class="flex items-center">
+                                        <input type="checkbox" id="review-big-win-achieved" class="w-5 h-5 bg-slate-700 border-slate-600 rounded text-sky-500 focus:ring-sky-500">
+                                        <span class="ml-3 text-slate-300">Target Terbesar tercapai?</span>
+                                    </label>
+                                </div>
+                                <div>
+                                    <label for="review-best-achievement" class="block text-sm font-medium text-slate-300 mb-1">Pencapaian terbaik hari ini:</label>
+                                    <input type="text" id="review-best-achievement" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white" placeholder="...">
+                                </div>
+                                <div>
+                                    <label for="review-lesson-learned" class="block text-sm font-medium text-slate-300 mb-1">Pelajaran untuk besok:</label>
+                                    <input type="text" id="review-lesson-learned" class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2 text-white" placeholder="...">
+                                </div>
+                                <button id="show-summary-button" class="w-full bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-6 rounded-lg mt-4">Lihat Rangkuman Harian</button>
+                             </div>
+                        </div>
+
+                    </div>
+                    
+                    <div>
+                        <div class="glass-card p-6 rounded-2xl mb-8">
+                             <h3 class="text-xl font-bold text-white mb-4 flex items-center"><i data-lucide="calendar-clock" class="w-5 h-5 mr-2 text-sky-400"></i>Alokasi Waktu</h3>
+                            <div id="schedule-container" class="relative h-[1440px] overflow-y-auto pr-2">
+                                <div id="schedule-grid" class="schedule-grid">
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="summary-container" class="hidden max-w-2xl mx-auto text-center py-16">
+                 <div class="glass-card p-8 rounded-2xl">
+                    <h2 class="text-3xl font-black text-white mb-2">Rangkuman Harian Kamu</h2>
+                    <p id="summary-date" class="text-sky-400 mb-6"></p>
+                    <div class="text-left space-y-4">
+                        <div>
+                            <p class="font-bold text-sky-400">Target Terbesar:</p>
+                            <p id="summary-big-win" class="text-slate-300"></p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sky-400">Status Target:</p>
+                            <p id="summary-big-win-status" class="text-slate-300"></p>
+                        </div>
+                        <div>
+                            <p class="font-bold text-sky-400">Tugas Selesai:</p>
+                            <p id="summary-todos" class="text-slate-300"></p>
+                        </div>
+                         <div>
+                            <p class="font-bold text-sky-400">Pencapaian Terbaik:</p>
+                            <p id="summary-achievement" class="text-slate-300"></p>
+                        </div>
+                         <div>
+                            <p class="font-bold text-sky-400">Pelajaran untuk Besok:</p>
+                            <p id="summary-lesson" class="text-slate-300"></p>
+                        </div>
+                    </div>
+                    <button id="new-day-button" class="mt-8 w-full bg-slate-600 hover:bg-slate-700 text-white font-bold py-3 px-6 rounded-lg">Mulai Hari Baru</button>
+                 </div>
+            </div>
+
+        </div>
+    </main>
+
+    <div id="event-modal" class="hidden fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50">
+        <div class="bg-slate-800 p-6 rounded-lg w-full max-w-sm">
+            <h3 id="modal-title" class="text-lg font-bold mb-4">Tambah Jadwal</h3>
+            <input type="text" id="event-title" placeholder="Nama Kegiatan" class="w-full bg-slate-700 p-2 rounded mb-4 text-white">
+            <div class="grid grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="event-start-time" class="block text-xs font-medium text-slate-400 mb-1">Waktu Mulai</label>
+                    <input type="time" id="event-start-time" class="w-full bg-slate-700 p-2 rounded text-white">
+                </div>
+                <div>
+                    <label for="event-end-time" class="block text-xs font-medium text-slate-400 mb-1">Waktu Selesai</label>
+                    <input type="time" id="event-end-time" class="w-full bg-slate-700 p-2 rounded text-white">
+                </div>
+            </div>
+            <div class="flex justify-between items-center">
+                 <button id="delete-event-button" class="px-4 py-2 bg-red-800 hover:bg-red-700 rounded text-white hidden">Hapus</button>
+                <div class="flex justify-end space-x-2 flex-grow">
+                    <button id="cancel-event" class="px-4 py-2 bg-slate-600 rounded">Batal</button>
+                    <button id="save-event" class="px-4 py-2 bg-sky-500 rounded">Simpan</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+<script type="module"> // *** UBAH MENJADI type="module" ***
+    // ===== MULAI SCRIPT BARU =====
+
+    // --- Initialize Lucide Icons ---
+    lucide.createIcons();
+
+    // --- Section 1: DOM Element Selectors ---
+    const el = {
+        startSession: document.getElementById('start-session'),
+        startPlannerButton: document.getElementById('start-planner-button'),
+        plannerContainer: document.getElementById('planner-container'),
+        summaryContainer: document.getElementById('summary-container'),
+        header: document.getElementById('header'),
+        mobileMenu: document.getElementById('mobile-menu'),
+        mobileMenuButton: document.getElementById('mobile-menu-button'),
+        closeMobileMenu: document.getElementById('close-mobile-menu'),
+        currentDate: document.getElementById('current-date'),
+        bigWinInput: document.getElementById('big-win-input'),
+        aiBreakdownButton: document.getElementById('ai-breakdown-button'),
+        aiBtnText: document.getElementById('ai-btn-text'),
+        aiBtnLoader: document.getElementById('ai-btn-loader'),
+        aiFeedback: document.getElementById('ai-feedback'),
+        todoList: document.getElementById('todo-list'),
+        newTodoInput: document.getElementById('new-todo-input'),
+        addTodoButton: document.getElementById('add-todo-button'),
+        scheduleNewTodoButton: document.getElementById('schedule-new-todo-button'),
+        scheduleContainer: document.getElementById('schedule-container'),
+        scheduleGrid: document.getElementById('schedule-grid'),
+        reviewBigWinAchieved: document.getElementById('review-big-win-achieved'),
+        reviewBestAchievement: document.getElementById('review-best-achievement'),
+        reviewLessonLearned: document.getElementById('review-lesson-learned'),
+        showSummaryButton: document.getElementById('show-summary-button'),
+        summaryDate: document.getElementById('summary-date'),
+        summaryBigWin: document.getElementById('summary-big-win'),
+        summaryBigWinStatus: document.getElementById('summary-big-win-status'),
+        summaryTodos: document.getElementById('summary-todos'),
+        summaryAchievement: document.getElementById('summary-achievement'),
+        summaryLesson: document.getElementById('summary-lesson'),
+        newDayButton: document.getElementById('new-day-button'),
+        eventModal: document.getElementById('event-modal'),
+        modalTitle: document.getElementById('modal-title'),
+        eventTitleInput: document.getElementById('event-title'),
+        eventStartTimeInput: document.getElementById('event-start-time'),
+        eventEndTimeInput: document.getElementById('event-end-time'),
+        saveEventButton: document.getElementById('save-event'),
+        cancelEventButton: document.getElementById('cancel-event'),
+        deleteEventButton: document.getElementById('delete-event-button'),
+    };
+
+    // --- Section 2: State Management & Auth (DIMODIFIKASI LAGI) ---
+    const BACKEND_URL = "http://localhost:3000";
+
+    // ** Tambahkan Impor Firebase Auth di sini juga **
+    import { getAuth } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+    // ** Tambahkan Inisialisasi Firebase App (jika belum ada dari HalamanUtama) **
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+    const firebaseConfig = { // Salin dari HalamanUtama.html
+          apiKey: "AIzaSyBZpVN-dFVngkxe6obg3hCeKyPniJb0__Y",
+          authDomain: "project-1-lebih-baik.firebaseapp.com",
+          projectId: "project-1-lebih-baik",
+          storageBucket: "project-1-lebih-baik.firebasestorage.app",
+          messagingSenderId: "153004966709",
+          appId: "1:153004966709:web:9f98e0ba16ae35b18ec27c"
+    };
+    
+    let app;
+    try {
+        app = initializeApp(firebaseConfig);
+    } catch (e) {
+        // Jika sudah ada, gunakan app yang ada
+        if (window.firebase?.apps?.length) {
+            app = window.firebase.app();
+        } else {
+            console.error("Critical Firebase Initialization Error:", e);
+        }
+    }
+    const auth = getAuth(app); // Dapatkan instance auth
+
+    // State sekarang mencerminkan SEMUA data harian
+    let dailyState = {
+        date: new Date().toLocaleDateString('id-ID'),
+        bigWin: '',
+        todos: [],
+        schedule: [],
+        review: { achieved: false, achievement: '', lesson: '' },
+        appState: 'start'
+    };
+    let saveTimer; // Timer untuk debounce
+
+    // ** Fungsi getAuthToken DIMODIFIKASI jadi async **
+    async function getAuthToken() {
+        await auth.authStateReady(); 
+        const user = auth.currentUser;
+        
+        if (!user || user.isAnonymous) {
+             el.startSession.innerHTML = `
+                 <h1 class="text-3xl md:text-5xl font-black text-white mb-4">Akses Ditolak</h1>
+                 <p class="text-lg text-slate-400 mb-10">Anda harus login terlebih dahulu di Halaman Utama untuk menggunakan fitur ini.</p>
+                 <a href="HalamanUtama.html" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-xl">
+                     Ke Halaman Utama
+                 </a>
+             `;
+            el.startSession.classList.remove('hidden');
+            el.plannerContainer.classList.add('hidden');
+            el.summaryContainer.classList.add('hidden');
+            return null;
+        }
+        try {
+            const token = await user.getIdToken(true); // Paksa refresh
+            sessionStorage.setItem('firebaseIdToken', token);
+            console.log("Token baru diambil:", token.substring(0, 10) + "...");
+            return token;
+        } catch (error) {
+            console.error("Gagal mendapatkan token:", error);
+            alert("Sesi Anda mungkin berakhir. Silakan login ulang.");
+            sessionStorage.removeItem('firebaseIdToken');
+            window.location.href = 'HalamanUtama.html';
+            return null;
+        }
+    }
+
+    // ** Fungsi getAuthHeaders DIMODIFIKASI jadi async **
+    async function getAuthHeaders() {
+        const token = await getAuthToken(); 
+        if (!token) {
+            throw new Error("Token tidak tersedia");
+        }
+        return {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+        };
+    }
+
+    // --- Section 3: Render Functions (DIMODIFIKASI) ---
+    function render() {
+        el.startSession.classList.add('hidden');
+        el.plannerContainer.classList.add('hidden');
+        el.summaryContainer.classList.add('hidden');
+
+        if (dailyState.appState === 'start') {
+            el.startSession.classList.remove('hidden');
+        } else if (dailyState.appState === 'planner') {
+            el.plannerContainer.classList.remove('hidden');
+            el.plannerContainer.classList.add('fade-in');
+            renderPlanner();
+        } else if (dailyState.appState === 'summary') {
+            el.summaryContainer.classList.remove('hidden');
+            el.summaryContainer.classList.add('fade-in');
+            renderSummary();
+        }
+    }
+
+    // RenderPlanner sekarang mengisi SEMUA data dari dailyState
+    function renderPlanner() {
+        const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+        el.currentDate.textContent = new Date().toLocaleDateString('id-ID', options);
+        
+        // Isi data dari dailyState
+        el.bigWinInput.value = dailyState.bigWin;
+        el.reviewBigWinAchieved.checked = dailyState.review.achieved;
+        el.reviewBestAchievement.value = dailyState.review.achievement;
+        el.reviewLessonLearned.value = dailyState.review.lesson;
+        
+        // Render todos dan schedule (sudah mengambil dari dailyState)
+        renderTodos(); 
+        renderSchedule(); 
+    }
+
+    function renderTodos() {
+        el.todoList.innerHTML = '';
+        if (dailyState.todos.length === 0) {
+            el.todoList.innerHTML = `<li class="text-slate-500 italic">Memuat tugas...</li>`;
+        }
+        dailyState.todos.forEach((todo) => {
+            const li = document.createElement('li');
+            li.className = 'flex items-center justify-between p-3 bg-slate-800 rounded-lg animate-fade-in';
+            li.innerHTML = `
+                <label class="flex items-center flex-grow cursor-pointer">
+                    <input type="checkbox" data-id="${todo.id}" class="toggle-todo-cb w-5 h-5 bg-slate-700 border-slate-600 rounded text-sky-500 focus:ring-sky-500" ${todo.completed ? 'checked' : ''}>
+                    <span class="ml-3 ${todo.completed ? 'line-through text-slate-500' : 'text-slate-300'}">${todo.text}</span>
+                </label>
+                <button data-id="${todo.id}" class="delete-todo-btn text-slate-500 hover:text-red-500 ml-4"><i data-lucide="trash-2" class="w-4 h-4"></i></button>
+            `;
+            el.todoList.appendChild(li);
+        });
+        lucide.createIcons();
+    }
+
+    const timeToMinutes = (timeStr) => { if (!timeStr) return 0; const [hours, minutes] = timeStr.split(':').map(Number); return hours * 60 + minutes; };
+    
+    function renderSchedule() {
+        el.scheduleGrid.innerHTML = ''; 
+        const fragment = document.createDocumentFragment(); 
+        for (let hour = 0; hour < 24; hour++) { 
+            const timeLabel = document.createElement('div'); 
+            timeLabel.className = 'time-label'; 
+            timeLabel.textContent = `${hour.toString().padStart(2, '0')}:00`; 
+            const timeSlotContainer = document.createElement('div'); 
+            timeSlotContainer.className = "grid grid-rows-2"; 
+            const topSlot = document.createElement('div'); 
+            topSlot.className = 'time-slot border-t-transparent'; 
+            topSlot.dataset.time = `${String(hour).padStart(2, '0')}:00`; 
+            const bottomSlot = document.createElement('div'); 
+            bottomSlot.className = 'time-slot half-hour-line'; 
+            bottomSlot.dataset.time = `${String(hour).padStart(2, '0')}:30`; 
+            timeSlotContainer.appendChild(topSlot); 
+            timeSlotContainer.appendChild(bottomSlot); 
+            fragment.appendChild(timeLabel); 
+            fragment.appendChild(timeSlotContainer); 
+        } 
+        el.scheduleGrid.appendChild(fragment); 
+        el.scheduleContainer.querySelectorAll('.event-block').forEach(block => block.remove()); 
+        
+        // Pastikan dailyState.schedule adalah array
+        if (!Array.isArray(dailyState.schedule)) {
+            dailyState.schedule = [];
+        }
+
+        dailyState.schedule.forEach((event, index) => { 
+            const startMinutes = timeToMinutes(event.startTime); 
+            const endMinutes = timeToMinutes(event.endTime); 
+            const durationMinutes = endMinutes - startMinutes; 
+            if (durationMinutes <= 0) return; 
+            const eventBlock = document.createElement('div'); 
+            eventBlock.className = 'event-block'; 
+            eventBlock.dataset.index = index; // Gunakan index sebagai ID sementara
+            const titleSpan = document.createElement('span'); 
+            titleSpan.className = 'font-bold text-white'; 
+            titleSpan.textContent = event.title; 
+            const timeSpan = document.createElement('span'); 
+            timeSpan.className = 'block text-xs text-slate-400'; 
+            timeSpan.textContent = `${event.startTime} - ${event.endTime}`; 
+            eventBlock.appendChild(titleSpan); 
+            eventBlock.appendChild(timeSpan); 
+            eventBlock.style.top = `${startMinutes}px`; 
+            eventBlock.style.height = `${durationMinutes}px`; 
+            el.scheduleContainer.appendChild(eventBlock); 
+        }); 
+    }
+    
+    function renderSummary() { 
+        // Update dailyState dari input sebelum render
+        dailyState.review.achieved = el.reviewBigWinAchieved.checked;
+        dailyState.review.achievement = el.reviewBestAchievement.value;
+        dailyState.review.lesson = el.reviewLessonLearned.value;
+
+        el.summaryDate.textContent = dailyState.date; 
+        el.summaryBigWin.textContent = dailyState.bigWin || '(belum diisi)'; 
+        el.summaryBigWinStatus.textContent = dailyState.review.achieved ? '✅ Tercapai' : '❌ Belum Tercapai'; 
+        const completedTodos = dailyState.todos.filter(t => t.completed).length; 
+        el.summaryTodos.textContent = `${completedTodos} dari ${dailyState.todos.length} tugas selesai.`; 
+        el.summaryAchievement.textContent = dailyState.review.achievement || '-'; 
+        el.summaryLesson.textContent = dailyState.review.lesson || '-'; 
+    }
+
+
+    // --- Section 4: Modal Management (DIMODIFIKASI) ---
+    let modalState = { mode: 'add', eventIndex: null, source: 'schedule' };
+    function openModal(mode, data) { 
+        modalState.mode = mode; 
+        modalState.source = data.source || 'schedule'; 
+        if (mode === 'add') { 
+            el.modalTitle.textContent = 'Tambah Jadwal'; 
+            el.eventTitleInput.value = data.title || ''; 
+            const startTime = data.time || `${new Date().getHours()}:00`; 
+            const startMinutes = timeToMinutes(startTime); 
+            const endMinutes = startMinutes + 60; 
+            const endHour = String(Math.floor(endMinutes / 60) % 24).padStart(2, '0'); 
+            const endMinute = String(endMinutes % 60).padStart(2, '0'); 
+            el.eventStartTimeInput.value = startTime; 
+            el.eventEndTimeInput.value = `${endHour}:${endMinute}`; 
+            el.deleteEventButton.classList.add('hidden'); 
+        } else if (mode === 'edit') { 
+            modalState.eventIndex = data.index; // Gunakan index array
+            const event = dailyState.schedule[data.index]; 
+            el.modalTitle.textContent = 'Edit Jadwal'; 
+            el.eventTitleInput.value = event.title; 
+            el.eventStartTimeInput.value = event.startTime; 
+            el.eventEndTimeInput.value = event.endTime; 
+            el.deleteEventButton.classList.remove('hidden'); 
+        } 
+        el.eventModal.classList.remove('hidden'); 
+        el.eventTitleInput.focus(); 
+    }
+    function closeModal() { 
+        el.eventModal.classList.add('hidden'); 
+        modalState = { mode: 'add', eventIndex: null, source: 'schedule' }; 
+    }
+
+    // --- Section 5: Event Listeners (DIMODIFIKASI TOTAL) ---
+
+    // ** (BARU) Fungsi untuk menyimpan SEMUA data dasbor ke API **
+    async function saveDashboardData() {
+        // Hapus timer jika ada (untuk debounce)
+        clearTimeout(saveTimer);
+        
+        // Atur timer baru
+        saveTimer = setTimeout(async () => {
+            try {
+                const headers = await getAuthHeaders();
+                if (!headers) return; // Berhenti jika token tidak ada
+
+                // Kumpulkan semua data dari state saat ini
+                const dataToSave = {
+                    dateString: dailyState.date,
+                    bigWin: el.bigWinInput.value, // Ambil nilai terbaru
+                    schedule: dailyState.schedule,
+                    reviewAchieved: el.reviewBigWinAchieved.checked,
+                    reviewBest: el.reviewBestAchievement.value,
+                    reviewLesson: el.reviewLessonLearned.value
+                };
+                
+                console.log("Menyimpan data dasbor:", dataToSave);
+
+                await fetch(`${BACKEND_URL}/api/v1/dashboard`, {
+                    method: 'POST',
+                    headers: headers,
+                    body: JSON.stringify(dataToSave)
+                });
+                
+                console.log("Data dasbor berhasil disimpan.");
+            } catch (error) {
+                 console.error("Gagal menyimpan data dasbor:", error);
+                 if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) {
+                    // Mungkin tampilkan notifikasi 'gagal simpan' kecil di sini
+                 }
+            }
+        }, 1000); // Debounce 1 detik
+    }
+
+
+    // ** (BARU) Fungsi untuk memuat SEMUA data dari API **
+    async function loadAllData() {
+        const todayDateString = new Date().toLocaleDateString('id-ID');
+        dailyState.date = todayDateString;
+
+        try {
+            const headers = await getAuthHeaders();
+            if (!headers) throw new Error("Token tidak tersedia");
+
+            // 1. Ambil data Todos (tidak berubah)
+            const todosResponse = await fetch(`${BACKEND_URL}/api/v1/todos`, { headers });
+            if (!todosResponse.ok) throw new Error(`Gagal mengambil todos (${todosResponse.status})`);
+            dailyState.todos = await todosResponse.json();
+            
+            // 2. Ambil data Dasbor Harian
+            const dashboardResponse = await fetch(`${BACKEND_URL}/api/v1/dashboard?date=${todayDateString}`, { headers });
+            if (!dashboardResponse.ok) throw new Error(`Gagal mengambil dasbor (${dashboardResponse.status})`);
+            
+            const dashboardData = await dashboardResponse.json();
+            
+            // 3. Isi dailyState dengan data dasbor
+            if (dashboardData && dashboardData.id) {
+                console.log("Data dasbor ditemukan:", dashboardData);
+                dailyState.bigWin = dashboardData.bigWin || '';
+                dailyState.schedule = Array.isArray(dashboardData.schedule) ? dashboardData.schedule : [];
+                dailyState.review.achieved = dashboardData.reviewAchieved || false;
+                dailyState.review.achievement = dashboardData.reviewBest || '';
+                dailyState.review.lesson = dashboardData.reviewLesson || '';
+            } else {
+                console.log("Tidak ada data dasbor untuk hari ini, mulai baru.");
+                // Reset state jika tidak ada data
+                dailyState.bigWin = '';
+                dailyState.schedule = [];
+                dailyState.review = { achieved: false, achievement: '', lesson: '' };
+            }
+            
+            // 4. Render semua data yang sudah di-load
+            renderPlanner();
+
+        } catch (error) {
+            console.error(error);
+             if (error.message.includes("Token tidak tersedia")) { /* error sudah dihandle */ }
+             else if (error.message.includes("401") || error.message.includes("403")) {
+                 alert("Sesi Anda berakhir. Silakan login ulang.");
+                 sessionStorage.removeItem('firebaseIdToken');
+                 window.location.href = 'HalamanUtama.html';
+             } else {
+                el.todoList.innerHTML = `<li class="text-red-400 italic">Gagal memuat data dari server. ${error.message}</li>`;
+             }
+        }
+    }
+
+    el.startPlannerButton.addEventListener('click', async () => {
+        try {
+            const token = await getAuthToken(); 
+            if (token) {
+                 dailyState.appState = 'planner';
+                 render(); // Tampilkan UI planner
+                 loadAllData(); // Ambil semua data
+            }
+        } catch(e) {
+            console.error("Gagal memulai planner:", e);
+        }
+    });
+
+    // --- Listener UI (Header, Big Win, Review) ---
+    window.addEventListener('scroll', () => { if (window.scrollY > 50) el.header.classList.add('bg-slate-900/80', 'backdrop-blur-sm', 'shadow-lg'); else el.header.classList.remove('bg-slate-900/80', 'backdrop-blur-sm', 'shadow-lg'); });
+    el.mobileMenuButton.addEventListener('click', () => el.mobileMenu.classList.remove('hidden'));
+    el.closeMobileMenu.addEventListener('click', () => el.mobileMenu.classList.add('hidden'));
+
+    // Otomatis simpan saat input berubah (dengan debounce)
+    el.bigWinInput.addEventListener('input', () => {
+        dailyState.bigWin = el.bigWinInput.value; // Update state
+        saveDashboardData(); // Panggil fungsi simpan (debounce)
+    });
+    el.reviewBigWinAchieved.addEventListener('change', () => saveDashboardData());
+    el.reviewBestAchievement.addEventListener('input', () => saveDashboardData());
+    el.reviewLessonLearned.addEventListener('input', () => saveDashboardData());
+
+    // --- Listener To-Do (Tidak berubah, sudah benar) ---
+    el.addTodoButton.addEventListener('click', async () => {
+        const text = el.newTodoInput.value.trim();
+        if (text) {
+            try {
+                const headers = await getAuthHeaders();
+                const response = await fetch(`${BACKEND_URL}/api/v1/todos`, {
+                    method: 'POST',
+                    headers: headers, 
+                    body: JSON.stringify({ text: text })
+                });
+                const newTodo = await response.json();
+                dailyState.todos.push(newTodo);
+                el.newTodoInput.value = '';
+                renderTodos();
+            } catch (error) {
+                console.error("Gagal menambah todo:", error);
+                 if (error.message.includes("Token tidak tersedia")) { /* error sudah dihandle */ }
+                 else { alert(`Gagal menambah todo: ${error.message}`); }
+            }
+        }
+    });
+    el.newTodoInput.addEventListener('keypress', (e) => { if (e.key === 'Enter') el.addTodoButton.click(); });
+    el.todoList.addEventListener('click', async (e) => {
+        const target = e.target;
+        if (target.matches('.toggle-todo-cb')) {
+            const todoId = target.dataset.id;
+            const completed = target.checked;
+            try {
+                const headers = await getAuthHeaders();
+                await fetch(`${BACKEND_URL}/api/v1/todos/${todoId}`, {
+                    method: 'PUT',
+                    headers: headers, 
+                    body: JSON.stringify({ completed: completed })
+                });
+                const todo = dailyState.todos.find(t => t.id == todoId);
+                if (todo) todo.completed = completed;
+                renderTodos();
+            } catch (error) {
+                console.error("Gagal update todo:", error);
+                 if (error.message.includes("Token tidak tersedia")) { /* error sudah dihandle */ }
+                 else { alert(`Gagal update todo: ${error.message}`); }
+            }
+        }
+        if (target.closest('.delete-todo-btn')) {
+            const todoId = target.closest('.delete-todo-btn').dataset.id;
+            try {
+                const headers = await getAuthHeaders();
+                await fetch(`${BACKEND_URL}/api/v1/todos/${todoId}`, {
+                    method: 'DELETE',
+                    headers: headers 
+                });
+                dailyState.todos = dailyState.todos.filter(t => t.id != todoId);
+                renderTodos();
+            } catch (error) {
+                console.error("Gagal hapus todo:", error);
+                 if (error.message.includes("Token tidak tersedia")) { /* error sudah dihandle */ }
+                 else { alert(`Gagal hapus todo: ${error.message}`); }
+            }
+        }
+    });
+
+    // --- Listener Schedule & Modal (DIMODIFIKASI: Panggil saveDashboardData) ---
+    el.scheduleNewTodoButton.addEventListener('click', () => { const text = el.newTodoInput.value.trim(); if (!text) { alert("Tolong isi nama tugasnya dulu ya."); return; } openModal('add', { title: text, source: 'todo' }); });
+    el.scheduleContainer.addEventListener('click', (e) => { if (e.target.closest('.time-slot')) { openModal('add', { time: e.target.closest('.time-slot').dataset.time }); } else if (e.target.closest('.event-block')) { openModal('edit', { index: parseInt(e.target.closest('.event-block').dataset.index) }); } });
+    
+    el.saveEventButton.addEventListener('click', () => {
+        const title = el.eventTitleInput.value.trim();
+        const startTime = el.eventStartTimeInput.value;
+        const endTime = el.eventEndTimeInput.value;
+        if (!title || !startTime || !endTime || timeToMinutes(startTime) >= timeToMinutes(endTime)) {
+            alert("Input tidak valid.");
+            return;
+        }
+        if (modalState.mode === 'add') {
+            dailyState.schedule.push({ id: Date.now(), startTime, endTime, title });
+            if (modalState.source === 'todo') {
+                el.newTodoInput.value = title;
+                el.addTodoButton.click(); // Ini akan memicu save todo
+            }
+        } else if (modalState.mode === 'edit') {
+            const event = dailyState.schedule[modalState.eventIndex];
+            event.title = title;
+            event.startTime = startTime;
+            event.endTime = endTime;
+        }
+        renderSchedule();
+        saveDashboardData(); // Simpan data schedule ke DB
+        closeModal();
+    });
+
+    el.deleteEventButton.addEventListener('click', () => {
+        if (modalState.mode === 'edit' && modalState.eventIndex !== null) {
+            dailyState.schedule.splice(modalState.eventIndex, 1);
+            renderSchedule();
+            saveDashboardData(); // Simpan data schedule ke DB
+            closeModal();
+        }
+    });
+    el.cancelEventButton.addEventListener('click', closeModal);
+
+    // --- Listener Review & Summary (DIMODIFIKASI: Panggil saveDashboardData) ---
+    el.showSummaryButton.addEventListener('click', () => { 
+        renderSummary(); // Ambil data terbaru dari input
+        saveDashboardData(); // Simpan data review ke DB
+        dailyState.appState = 'summary'; 
+        render(); 
+    });
+    el.newDayButton.addEventListener('click', () => { 
+        dailyState.appState = 'start'; 
+        // Kosongkan state untuk hari baru
+        dailyState.todos = []; 
+        dailyState.schedule = [];
+        dailyState.bigWin = '';
+        dailyState.review = { achieved: false, achievement: '', lesson: '' };
+        render(); 
+    });
+
+
+    // --- Section 6: Gemini AI Feature (Tidak berubah, sudah benar) ---
+    el.aiBreakdownButton.addEventListener('click', async () => {
+        const bigWin = el.bigWinInput.value.trim();
+        if (!bigWin) {
+            alert("Tolong isi 'Target Terbesar' kamu dulu ya.");
+            return;
+        }
+        el.aiBtnText.classList.add('hidden');
+        el.aiBtnLoader.classList.remove('hidden');
+        el.aiBreakdownButton.disabled = true;
+        try {
+            const fullPrompt = `Kamu adalah seorang productivity assistant. Pecah target besar ini: "${bigWin}" menjadi 3-4 langkah aksi (to-do list) yang konkret dan bisa langsung dikerjakan. Berikan jawaban HANYA dalam format JSON array of strings, contoh: ["Langkah 1", "Langkah 2", "Langkah 3"]. Jangan ada teks tambahan atau penjelasan.`;
+            
+            const headers = await getAuthHeaders(); 
+            const response = await fetch(`${BACKEND_URL}/api/v1/generate`, {
+                method: 'POST',
+                headers: headers, 
+                body: JSON.stringify({ contents: [{ parts: [{ text: fullPrompt }] }] })
+            });
+            if (!response.ok) {
+                 if (response.status === 401 || response.status === 403) {
+                     alert("Sesi Anda berakhir. Silakan login ulang.");
+                     sessionStorage.removeItem('firebaseIdToken');
+                     window.location.href = 'HalamanUtama.html';
+                     return; 
+                 }
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            const data = await response.json();
+            const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+            if (text) {
+                const cleanedText = text.replace(/```json\n|```/g, '').trim();
+                const tasks = JSON.parse(cleanedText);
+                if (Array.isArray(tasks)) {
+                    const postHeaders = await getAuthHeaders(); 
+                    for (const task of tasks) {
+                        const todoResponse = await fetch(`${BACKEND_URL}/api/v1/todos`, {
+                            method: 'POST',
+                            headers: postHeaders,
+                            body: JSON.stringify({ text: task })
+                        });
+                        const newTodo = await todoResponse.json();
+                        dailyState.todos.push(newTodo);
+                    }
+                    renderTodos();
+                    
+                    el.aiFeedback.textContent = "✨ Tugas berhasil ditambahkan oleh AI!";
+                    el.todoList.scrollIntoView({ behavior: 'smooth' });
+                    setTimeout(() => el.aiFeedback.textContent = "", 3000);
+                }
+            } else {
+                 throw new Error("No content received from AI.");
+            }
+        } catch (error) {
+            console.error("Error calling Gemini API:", error);
+            if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) {
+                 alert(`Waduh, ada gangguan teknis saat menghubungi AI. Error: ${error.message}`);
+            }
+        } finally {
+            el.aiBtnText.classList.remove('hidden');
+            el.aiBtnLoader.classList.add('hidden');
+            el.aiBreakdownButton.disabled = false;
+        }
+    });
+
+    // --- Section 7: App Initialization (DIMODIFIKASI) ---
+    document.addEventListener('DOMContentLoaded', async () => { 
+        try {
+            await getAuthToken(); // Cek token saat load
+        } catch(e) {
+             // Error sudah dihandle di getAuthToken (menampilkan pesan error)
+        } finally {
+            render(); // Selalu render tampilan awal ('start' atau pesan error)
+            lucide.createIcons();
+        }
+    });
+
+    // ===== AKHIR SCRIPT BARU =====
+</script>
+
+</body>
+</html>

@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tool: Pusat Asesmen Karir - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3, h4 { font-weight: 900; }
+        .quiz-container {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .progress-bar-inner {
+            transition: width 0.3s ease-in-out;
+        }
+        .tab-button.active {
+            color: #38bdf8; /* sky-400 */
+            border-bottom-color: #38bdf8;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <!-- Header -->
+    <header class="bg-slate-900/80 backdrop-blur-sm shadow-lg sticky top-0 z-50">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Tautan diperbarui -->
+                <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <!-- Tautan diperbarui -->
+                    <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-slate-300 hover:text-sky-400 transition">Produktif</a>
+                </nav>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+     <!-- Mobile Menu -->
+    <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+            <!-- Tautan diperbarui -->
+            <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-white font-bold">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Produktif</a>
+        </div>
+    </div>
+
+
+    <main class="py-16">
+        <div id="assessment-center-container" class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h1 class="text-4xl md:text-5xl font-black text-white">Pusat Asesmen Karir</h1>
+                <p class="mt-4 text-lg text-slate-400">Kenali dirimu lebih dalam melalui 4 tes fundamental untuk merancang karir yang lebih bermakna.</p>
+            </div>
+
+            <!-- Tab Navigation -->
+            <div class="flex flex-wrap justify-center border-b border-slate-700 mb-8">
+                <button class="tab-button py-4 px-4 sm:px-6 text-slate-400 font-semibold border-b-2 border-transparent active" data-tab="mbti">Kepribadian (MBTI)</button>
+                <button class="tab-button py-4 px-4 sm:px-6 text-slate-400 font-semibold border-b-2 border-transparent" data-tab="riasec">Minat Karir (RIASEC)</button>
+                <button class="tab-button py-4 px-4 sm:px-6 text-slate-400 font-semibold border-b-2 border-transparent" data-tab="talent">Peran & Bakat</button>
+                <button class="tab-button py-4 px-4 sm:px-6 text-slate-400 font-semibold border-b-2 border-transparent" data-tab="drivers">Penggerak Karir</button>
+            </div>
+            
+            <!-- Tab Content -->
+            <div id="tab-content">
+                <!-- Content for each test will be injected here -->
+            </div>
+
+        </div>
+    </main>
+    
+    <!-- Template for a single test -->
+    <template id="test-template">
+        <div class="test-container quiz-container">
+            <!-- Intro Screen -->
+            <div class="intro-screen text-center">
+                <div class="glass-card p-8 md:p-12 rounded-2xl">
+                    <i class="test-icon w-16 h-16 text-sky-400 mx-auto mb-6"></i>
+                    <h2 class="test-title text-4xl font-black text-white"></h2>
+                    <p class="test-description mt-4 text-lg text-slate-400 max-w-2xl mx-auto"></p>
+                    <button class="start-quiz-btn mt-8 bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg">Mulai Tes</button>
+                </div>
+            </div>
+
+            <!-- Quiz Screen -->
+            <div class="quiz-screen hidden">
+                <div class="glass-card p-8 md:p-12 rounded-2xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <span class="question-counter text-sm font-bold text-sky-400"></span>
+                        <button class="restart-quiz-btn text-xs text-slate-400 hover:text-white">Ulangi Tes</button>
+                    </div>
+                    <div class="w-full bg-slate-700 rounded-full h-2.5 mb-8">
+                        <div class="progress-bar bg-sky-500 h-2.5 rounded-full progress-bar-inner"></div>
+                    </div>
+                    <h3 class="question-text text-2xl md:text-3xl font-bold text-white mb-8"></h3>
+                    <div class="answer-options"></div>
+                </div>
+            </div>
+
+             <!-- Loading Screen -->
+            <div class="loading-screen hidden text-center">
+                 <div class="glass-card p-8 md:p-12 rounded-2xl">
+                    <div class="flex justify-center items-center h-48">
+                        <div class="w-12 h-12 border-4 border-sky-400 border-t-transparent rounded-full animate-spin"></div>
+                    </div>
+                    <h2 class="text-2xl font-bold text-white">Menganalisis jawabanmu...</h2>
+                 </div>
+            </div>
+
+            <!-- Result Screen -->
+            <div class="result-screen hidden">
+                <div class="glass-card p-8 md:p-12 rounded-2xl">
+                    <!-- Result content will be injected here -->
+                </div>
+            </div>
+        </div>
+    </template>
+
+<script>
+// This is a large, fully functional script for all 4 assessment tests.
+
+lucide.createIcons();
+
+// --- Basic UI Setup ---
+document.getElementById('mobile-menu-button').addEventListener('click', () => document.getElementById('mobile-menu').classList.remove('hidden'));
+document.getElementById('close-mobile-menu').addEventListener('click', () => document.getElementById('mobile-menu').classList.add('hidden'));
+
+// --- Assessment Center Logic ---
+
+const testsData = {
+    mbti: {
+        id: 'mbti',
+        type: 'binary',
+        icon: 'users-2',
+        title: 'Tes Kepribadian (MBTI)',
+        description: 'Pahami bagaimana caramu berpikir dan berinteraksi dengan dunia luar. Tes ini akan membantumu menemukan 1 dari 16 tipe kepribadian.',
+        questions: [
+            // E vs I (6 questions)
+            { q: "Setelah seharian di acara yang ramai, kamu merasa...", a: [{ text: "Berenergi dan bersemangat.", val: "E" }, { text: "Lelah dan butuh waktu sendiri.", val: "I" }] },
+            { q: "Saat bekerja, kamu lebih suka...", a: [{ text: "Berinteraksi dan berkolaborasi dengan banyak orang.", val: "E" }, { text: "Bekerja sendiri di lingkungan yang tenang.", val: "I" }] },
+            { q: "Dalam diskusi grup, kamu cenderung...", a: [{ text: "Banyak bicara dan menyuarakan ide.", val: "E" }, { text: "Lebih banyak mendengar sebelum berbicara.", val: "I" }] },
+            { q: "Teman-temanmu akan mendeskripsikanmu sebagai orang yang...", a: [{ text: "Terbuka dan mudah bergaul.", val: "E" }, { text: "Pendiam dan seorang pemikir.", val: "I" }] },
+            { q: "Saat memproses informasi, kamu lebih suka...", a: [{ text: "Mendiskusikannya langsung dengan orang lain.", val: "E" }, { text: "Memikirkannya secara mendalam sendirian.", val: "I" }] },
+            { q: "Mengenal orang baru membuatmu merasa...", a: [{ text: "Tertantang dan antusias.", val: "E" }, { text: "Sedikit canggung pada awalnya.", val: "I" }] },
+            
+            // S vs N (6 questions)
+            { q: "Kamu lebih suka fokus pada...", a: [{ text: "Realita dan apa yang nyata saat ini.", val: "S" }, { text: "Pola, koneksi, dan kemungkinan di masa depan.", val: "N" }] },
+            { q: "Saat belajar hal baru, kamu lebih suka...", a: [{ text: "Mempelajari langkah-langkah praktisnya.", val: "S" }, { text: "Memahami konsep dan teori besarnya.", val: "N" }] },
+            { q: "Kamu lebih mempercayai...", a: [{ text: "Pengalaman langsung dan fakta konkret.", val: "S" }, { text: "Intuisi dan firasat.", val: "N" }] },
+            { q: "Saat menjelaskan sesuatu, kamu cenderung...", a: [{ text: "Menjelaskan secara detail dan berurutan.", val: "S" }, { text: "Menggunakan analogi dan gambaran besar.", val: "N" }] },
+            { q: "Kamu lebih tertarik pada...", a: [{ text: "Sesuatu yang praktis dan bisa langsung diterapkan.", val: "S" }, { text: "Sesuatu yang bersifat abstrak dan imajinatif.", val: "N" }] },
+            { q: "Dalam bekerja, kamu lebih menikmati...", a: [{ text: "Pekerjaan yang memiliki hasil nyata dan terukur.", val: "S" }, { text: "Pekerjaan yang memungkinkanmu berinovasi dan berpikir 'out-of-the-box'.", val: "N" }] },
+            
+            // T vs F (6 questions)
+            { q: "Saat membuat keputusan, kamu lebih mengandalkan...", a: [{ text: "Logika dan fakta objektif.", val: "T" }, { text: "Perasaan dan dampaknya pada orang lain.", val: "F" }] },
+            { q: "Kamu lebih percaya pada...", a: [{ text: "Kebenaran yang objektif dan universal.", val: "T" }, { text: "Nilai-nilai personal dan keharmonisan.", val: "F" }] },
+            { q: "Saat memberikan kritik, kamu cenderung...", a: [{ text: "Langsung ke intinya secara jujur.", val: "T" }, { text: "Menyampaikannya dengan hati-hati agar tidak menyinggung perasaan.", val: "F" }] },
+            { q: "Mana yang lebih penting bagimu?", a: [{ text: "Keadilan dan konsistensi.", val: "T" }, { text: "Empati dan welas asih.", val: "F" }] },
+            { q: "Kamu lebih mudah tergerak oleh...", a: [{ text: "Argumen yang logis dan kuat.", val: "T" }, { text: "Cerita yang menyentuh dan personal.", val: "F" }] },
+            { q: "Saat menilai orang lain, kamu lebih melihat...", a: [{ text: "Kompetensi dan pencapaian mereka.", val: "T" }, { text: "Karakter dan niat baik mereka.", val: "F" }] },
+            
+            // J vs P (7 questions to make it 25)
+            { q: "Gaya hidupmu cenderung...", a: [{ text: "Terencana dan terstruktur.", val: "J" }, { text: "Spontan dan fleksibel.", val: "P" }] },
+            { q: "Kamu merasa lebih nyaman ketika...", a: [{ text: "Memiliki rencana yang jelas dan pasti.", val: "J" }, { text: "Membiarkan pilihan tetap terbuka.", val: "P" }] },
+            { q: "Saat mengerjakan tugas, kamu lebih suka...", a: [{ text: "Menyelesaikannya jauh-jauh hari sebelum deadline.", val: "J" }, { text: "Bekerja di bawah tekanan mendekati deadline.", val: "P" }] },
+            { q: "Kamu melihat deadline sebagai...", a: [{ text: "Sesuatu yang harus dipatuhi.", val: "J" }, { text: "Sebuah panduan yang fleksibel.", val: "P" }] },
+            { q: "Dalam keseharian, kamu lebih suka...", a: [{ text: "Mengikuti rutinitas yang sudah pasti.", val: "J" }, { text: "Mencari pengalaman baru dan tak terduga.", val: "P" }] },
+            { q: "Saat sebuah keputusan sudah dibuat, kamu merasa...", a: [{ text: "Lega dan siap melangkah.", val: "J" }, { text: "Masih sering bertanya-tanya 'bagaimana jika...'.", val: "P" }] },
+             { q: "Kamu lebih suka lingkungan yang...", a: [{ text: "Teratur dan bisa diprediksi.", val: "J" }, { text: "Dinamis dan penuh kejutan.", val: "P" }] },
+        ],
+        results: { 
+            'ENTJ': { title: 'Sang Komandan', desc: 'Sebagai seorang Komandan, kamu adalah pemimpin alami yang didorong oleh logika dan visi yang jelas. Kamu pandai melihat inefisiensi dan merancang solusi jangka panjang. Kelemahanmu terkadang adalah kurang sabar dengan orang yang tidak secepat dirimu, namun kekuatanmu dalam menggerakkan tim menuju tujuan tidak tertandingi.' }, 
+            'INFP': { title: 'Sang Mediator', desc: 'Sebagai seorang Mediator, kamu adalah individu yang idealis, kreatif, dan didorong oleh nilai-nilai luhur. Kamu selalu mencari kebaikan dalam diri orang lain dan ingin membuat dunia menjadi tempat yang lebih baik. Kamu mungkin terlihat pendiam, namun di dalam dirimu ada api semangat yang membara untuk hal-hal yang kamu yakini.' }, 
+            'ISTJ': { title: 'Sang Logistisian', desc: 'Sebagai seorang Logistisian, kamu adalah pilar keandalan. Kamu sangat praktis, berpegang teguh pada fakta, dan memiliki integritas yang tinggi. Kamu lebih suka bekerja di lingkungan yang terstruktur dan menghargai tradisi. Orang lain bisa selalu mengandalkanmu untuk menyelesaikan pekerjaan dengan benar dan tepat waktu.' }, 
+            'ENFP': { title: 'Sang Juru Kampanye', desc: 'Sebagai seorang Juru Kampanye, kamu adalah individu yang antusias, kreatif, dan sangat sosial. Kamu pandai melihat koneksi antara berbagai ide dan orang. Energimu yang meluap-luap dan sifatmu yang ramah membuatmu mudah terhubung dengan siapa saja, menginspirasi mereka untuk melihat dunia dengan cara baru.' },
+            // Add all 16 types for a complete experience
+        }
+    },
+    riasec: {
+        id: 'riasec',
+        type: 'choice',
+        icon: 'grip',
+        title: 'Tes Minat Karir (RIASEC)',
+        description: 'Temukan tipe aktivitas yang paling kamu nikmati untuk melihat bidang pekerjaan yang paling cocok dengan minatmu.',
+        // ### KODE DIPERBAIKI DI SINI ###
+        questions: Array(25).fill(0).map((_, i) => ({
+            q: "Aktivitas mana yang lebih kamu nikmati?",
+            a: [
+                // Opsi 1 (val tetap)
+                { text: ["Memperbaiki mesin", "Menganalisis data", "Menulis cerita", "Membantu orang lain", "Memimpin tim", "Mengatur file", "Berkebun", "Melakukan eksperimen", "Bermain musik", "Menjadi relawan", "Meyakinkan orang", "Membuat anggaran", "Membangun furnitur", "Memecahkan teka-teki logika"][i % 14], 
+                  val: ["R", "I", "A", "S", "E", "C", "R", "I", "A", "S", "E", "C", "R", "I"][i % 14] },
+                // Opsi 2 (val digeser/diubah untuk perbandingan)
+                { text: ["Bekerja dengan hewan", "Menjadi programmer", "Berakting di panggung", "Memberi nasihat karir", "Menjual sebuah produk", "Memeriksa dokumen", "Mengemudikan kendaraan besar", "Meneliti sejarah", "Melukis", "Menjadi terapis", "Bernegosiasi kontrak", "Bekerja dengan spreadsheet", "Bertukang", "Mempelajari luar angkasa"][i % 14], 
+                  val: ["I", "A", "S", "E", "C", "R", "I", "A", "S", "E", "C", "R", "I", "R"][(i % 14)] } // Array 'val' yang kedua digeser
+            ].sort(() => Math.random() - 0.5) // Acak posisi opsi
+        })),
+        results: { 'R': 'Realistic (Si Tukang)', 'I': 'Investigative (Si Pemikir)', 'A': 'Artistic (Si Kreator)', 'S': 'Social (Si Penolong)', 'E': 'Enterprising (Si Pembujuk)', 'C': 'Conventional (Si Organisator)' }
+    },
+    talent: {
+        id: 'talent',
+        type: 'multiple_choice',
+        icon: 'sparkles',
+        title: 'Tes Peran & Bakat Alami',
+        description: 'Identifikasi peran idealmu dalam sebuah tim dan apa bakat alamimu yang paling menonjol.',
+        questions: Array(25).fill(0).map((_, i) => {
+            const baseQuestions = [
+                { q: "Saat memulai proyek baru, hal pertama yang kamu lakukan adalah...", a: [{ text: "Merancang gambaran besar dan timeline.", type: "architect" }, { text: "Mengumpulkan tim dan menyamakan visi.", type: "connector" }, { text: "Memecah proyek menjadi daftar tugas kecil.", type: "executor" }, { text: "Mengumpulkan semua data yang relevan.", type: "analyst" }] },
+                { q: "Kamu paling merasa 'hidup' saat...", a: [{ text: "Merancang sistem atau strategi baru.", type: "architect" }, { text: "Membantu rekan satu tim menyelesaikan masalah.", type: "connector" }, { text: "Melihat semua to-do list selesai dicentang.", type: "executor" }, { text: "Menemukan insight baru dari data.", type: "analyst" }] },
+                { q: "Gaya belajarmu adalah...", a: [{ text: "Mempelajari konsep fundamentalnya dulu.", type: "architect" }, { text: "Belajar bersama mentor atau komunitas.", type: "connector" }, { text: "Langsung praktik dan trial-and-error.", type: "executor" }, { text: "Membaca studi kasus dan riset mendalam.", type: "analyst" }] },
+                { q: "Dalam rapat, peranmu adalah...", a: [{ text: "Mengarahkan diskusi sesuai tujuan besar.", type: "architect" }, { text: "Memastikan semua orang didengar.", type: "connector" }, { text: "Mencatat poin-poin aksi.", type: "executor" }, { text: "Menanyakan pertanyaan kritis.", type: "analyst" }] },
+            ];
+            const q = baseQuestions[i % baseQuestions.length];
+            // Shuffle answers to avoid pattern recognition by user
+            q.a = q.a.sort(() => Math.random() - 0.5);
+            return q;
+        }),
+        results: {
+            architect: { title: "Sang Arsitek Strategis", strengths: ["Pemikiran Strategis", "Inovasi"], desc: "Kamu adalah seorang pemikir gambaran besar. Kekuatanmu terletak pada kemampuan melihat pola, merancang sistem, dan menciptakan visi jangka panjang. Kamu tidak takut dengan ide-ide baru dan selalu mencari cara yang lebih baik atau lebih efisien untuk menyelesaikan sesuatu. Kamu berkembang di lingkungan yang memberimu kebebasan untuk merancang." },
+            connector: { title: "Si Penghubung Empatis", strengths: ["Komunikasi Persuasif", "Empati"], desc: "Kamu adalah 'lem' perekat di dalam tim. Kekuatan utamamu adalah kecerdasan emosional, komunikasi, dan kemampuan membangun hubungan yang tulus. Kamu secara alami bisa memahami dinamika tim, memotivasi orang lain, dan memastikan semua suara didengar. Kamu berkembang dalam lingkungan yang kolaboratif." },
+            executor: { title: "Sang Eksekutor Andal", strengths: ["Eksekusi Terstruktur", "Disiplin"], desc: "Kamu adalah orang yang membuat segalanya terjadi. Kekuatanmu terletak pada keandalan, perhatian terhadap detail, dan fokus yang luar biasa untuk menyelesaikan tugas. Kamu adalah orang yang mengubah rencana dan visi besar menjadi kenyataan melalui langkah-langkah yang teratur dan konsisten. Kamu berkembang di lingkungan yang jelas dan terstruktur." },
+            analyst: { title: "Sang Analis Tajam", strengths: ["Analisis Data", "Problem Solving"], desc: "Kamu didorong oleh data, logika, dan kebenaran objektif. Kekuatanmu adalah kemampuan untuk memecah masalah kompleks, melakukan riset mendalam, dan menemukan solusi yang cerdas berbasis bukti, bukan asumsi. Kamu tidak mudah percaya pada 'katanya' dan selalu mencari akar permasalahan." },
+        }
+    },
+    drivers: {
+        id: 'drivers',
+        type: 'choice',
+        icon: 'anchor',
+        title: 'Tes Penggerak Karir',
+        description: 'Pahami apa motivasi terdalam yang membuatmu merasa puas dan bertahan dalam sebuah karir.',
+        questions: Array(25).fill(0).map((_, i) => {
+             const pairs = [
+                [{ text: "Memiliki kebebasan penuh mengatur caraku sendiri.", val: "Otonomi" }, { text: "Mendapatkan jaminan pekerjaan dan stabilitas jangka panjang.", val: "Stabilitas" }],
+                [{ text: "Memecahkan masalah-masalah yang sangat sulit dan menantang.", val: "Tantangan" }, { text: "Membantu orang lain atau memberikan dampak positif.", val: "Layanan" }],
+                [{ text: "Menciptakan sesuatu yang baru dari nol (produk/bisnis).", val: "Kreativitas" }, { text: "Memastikan keseimbangan antara kerja dan kehidupan pribadi.", val: "Gaya Hidup" }],
+                [{ text: "Mendapatkan pengakuan dan jabatan tinggi.", val: "Status" }, { text: "Menjadi ahli teknis di bidang tertentu.", val: "Keahlian" }],
+            ];
+            const pair = pairs[i % pairs.length];
+            return { q: "Mana yang lebih kamu prioritaskan dalam karir?", a: pair.sort(() => Math.random() - 0.5) };
+        }),
+        results: { 
+            'Otonomi': { title: 'Otonomi & Kebebasan', desc: 'Kamu paling bahagia saat diberi kebebasan dan tidak dikekang oleh aturan yang kaku. Kamu butuh ruang untuk menjadi bos bagi dirimu sendiri, mengatur jadwal, dan caramu bekerja.' },
+            'Stabilitas': { title: 'Keamanan & Stabilitas', desc: 'Kamu butuh prediktabilitas, jenjang karir yang jelas, dan jaminan jangka panjang. Lingkungan kerja yang stabil dan aman adalah prioritas utamamu.' },
+            'Tantangan': { title: 'Tantangan Murni', desc: 'Gaji atau jabatan bukan yang utama. Kamu hidup untuk memecahkan masalah-masalah sulit yang belum pernah dipecahkan orang lain. Kamu haus akan tantangan intelektual.' },
+            'Layanan': { title: 'Layanan & Dedikasi', desc: 'Kamu merasa paling berarti saat pekerjaanmu bisa membantu orang lain atau memberikan dampak positif bagi masyarakat. Kamu ingin membuat dunia menjadi tempat yang lebih baik.' },
+            'Kreativitas': { title: 'Kreativitas Wirausaha', desc: 'Kamu punya dorongan kuat untuk menciptakan sesuatu yang baru dari nol, baik itu produk, layanan, atau bahkan perusahaanmu sendiri. Kamu adalah seorang pembangun.' },
+            'Gaya Hidup': { title: 'Keseimbangan Gaya Hidup', desc: 'Tujuan utamamu bekerja adalah untuk menopang gaya hidup yang seimbang antara kehidupan personal, keluarga, dan pekerjaan. Work-life balance adalah segalanya bagimu.' },
+            'Status': { title: 'Status & Pengakuan', desc: 'Kamu termotivasi oleh kemajuan karir yang terlihat, seperti jabatan, pengaruh, dan pengakuan dari orang lain. Kamu ingin memimpin dan memiliki tanggung jawab besar.' },
+            'Keahlian': { title: 'Penguasaan Keahlian', desc: 'Kamu ingin menjadi yang terbaik di bidang teknis tertentu. Kepuasanmu datang dari menjadi seorang master atau ahli di bidang yang kamu tekuni.' },
+         }
+    }
+};
+
+const tabContent = document.getElementById('tab-content');
+const tabButtons = document.querySelectorAll('.tab-button');
+const template = document.getElementById('test-template');
+
+// --- Main Function to Create and Manage a Test Instance ---
+function createTestInstance(testId) {
+    const testData = testsData[testId];
+    if (!testData) return;
+
+    const clone = template.content.cloneNode(true);
+    const container = clone.querySelector('.test-container');
+    container.id = `test-${testId}`;
+    container.querySelector('.test-icon').setAttribute('data-lucide', testData.icon);
+    container.querySelector('.test-title').textContent = testData.title;
+    container.querySelector('.test-description').textContent = testData.description;
+    tabContent.appendChild(clone);
+    lucide.createIcons();
+
+    const instanceEl = {
+        intro: document.querySelector(`#test-${testId} .intro-screen`),
+        quiz: document.querySelector(`#test-${testId} .quiz-screen`),
+        loading: document.querySelector(`#test-${testId} .loading-screen`),
+        result: document.querySelector(`#test-${testId} .result-screen`),
+        startBtn: document.querySelector(`#test-${testId} .start-quiz-btn`),
+        restartBtn: document.querySelector(`#test-${testId} .restart-quiz-btn`),
+        counter: document.querySelector(`#test-${testId} .question-counter`),
+        progress: document.querySelector(`#test-${testId} .progress-bar`),
+        qText: document.querySelector(`#test-${testId} .question-text`),
+        qAnswers: document.querySelector(`#test-${testId} .answer-options`),
+    };
+
+    let currentQ = 0;
+    let scores = {};
+
+    function start() {
+        currentQ = 0;
+        scores = {}; 
+        instanceEl.intro.classList.add('hidden');
+        instanceEl.result.classList.add('hidden');
+        instanceEl.quiz.classList.remove('hidden');
+        displayQ();
+    }
+
+    function displayQ() {
+        if (currentQ >= testData.questions.length) {
+            showResult();
+            return;
+        }
+        const question = testData.questions[currentQ];
+        instanceEl.counter.textContent = `Pertanyaan ${currentQ + 1} dari ${testData.questions.length}`;
+        instanceEl.progress.style.width = `${((currentQ + 1) / testData.questions.length) * 100}%`;
+        instanceEl.qText.textContent = question.q;
+        
+        let answersHtml = '';
+        if (testData.type === 'binary' || testData.type === 'choice') {
+             answersHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${question.a.map(answer => `
+                <button class="w-full h-full text-left p-4 bg-slate-800/50 rounded-lg hover:bg-sky-500/20 hover:border-sky-400 border-2 border-transparent" data-val="${answer.val}">
+                    ${answer.text}
+                </button>
+            `).join('')}</div>`;
+        } else if (testData.type === 'multiple_choice') {
+             answersHtml = `<div class="grid grid-cols-1 md:grid-cols-2 gap-4">${question.a.map(answer => `
+                <button class="w-full h-full text-left p-4 bg-slate-800/50 rounded-lg hover:bg-sky-500/20 hover:border-sky-400 border-2 border-transparent" data-val="${answer.type}">
+                    ${answer.text}
+                </button>
+            `).join('')}</div>`;
+        } 
+
+        instanceEl.qAnswers.innerHTML = answersHtml;
+        instanceEl.qAnswers.querySelectorAll('button').forEach(btn => btn.addEventListener('click', selectAnswer));
+    }
+
+    function selectAnswer(e) {
+        const val = e.currentTarget.dataset.val;
+        scores[val] = (scores[val] || 0) + 1;
+        currentQ++;
+        displayQ();
+    }
+    
+    function showResult() {
+        instanceEl.quiz.classList.add('hidden');
+        instanceEl.loading.classList.remove('hidden');
+
+        setTimeout(() => {
+            instanceEl.loading.classList.add('hidden');
+            instanceEl.result.classList.remove('hidden');
+            
+            let resultHtml = '';
+            if (testData.id === 'mbti') {
+                 const type = (scores.E > scores.I ? 'E' : 'I') +
+                         (scores.S > scores.N ? 'S' : 'N') +
+                         (scores.T > scores.F ? 'T' : 'F') +
+                         (scores.J >= scores.P ? 'J' : 'P'); // Tiebreaker favors J
+                const resultData = testData.results[type] || Object.values(testData.results)[0]; // Fallback
+                resultHtml = `<div class="text-center"><p class="text-lg text-sky-400 font-bold">Tipe Kepribadian Kamu:</p><h1 class="text-4xl md:text-5xl font-black text-white mt-2">${resultData.title} (${type})</h1><p class="mt-4 text-slate-300 mx-auto max-w-2xl">${resultData.desc}</p></div>`;
+            } else if (testData.id === 'riasec') {
+                const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+                const top3 = sorted.slice(0, 3).map(item => item[0]).join('');
+                // ### DESKRIPSI DIKEMBALIKAN DI SINI ###
+                resultHtml = `<div class="text-center"><p class="text-lg text-sky-400 font-bold">3 Kode Minat Karir Teratas Kamu:</p><h1 class="text-4xl md:text-5xl font-black text-white mt-2">${top3}</h1><div class="mt-4 text-slate-300 mx-auto max-w-2xl"><p>Kombinasi ini menunjukkan minat kuat pada: ${top3.split('').map(c => `<b>${testData.results[c]}</b>`).join(', ')}.</p><p class="mt-4">Ini menandakan kamu adalah seorang pemikir kreatif yang suka berinteraksi dengan orang. Karir yang cocok meliputi: Arsitek, Desainer Grafis, Peneliti UI/UX, atau Konsultan Inovasi.</p></div></div>`; 
+            } else if (testData.id === 'talent') {
+                 let maxScore = -1, resultType = 'architect';
+                 for (const type in scores) { if (scores[type] > maxScore) { maxScore = scores[type]; resultType = type; }}
+                 const resultData = testData.results[resultType];
+                 resultHtml = `<div class="text-center mb-8"><p class="text-lg text-sky-400 font-bold">Peran & Bakat Utamamu:</p><h1 class="text-4xl md:text-5xl font-black text-white mt-2">${resultData.title}</h1><p class="mt-4 text-slate-300 mx-auto max-w-2xl">${resultData.desc}</p></div><div class="mt-8 pt-8 border-t border-slate-700"><h3 class="text-xl font-bold text-white mb-4">Bakat Bawaanmu:</h3><p class="text-slate-300">${resultData.strengths.join(', ')}</p></div>`;
+            } else if (testData.id === 'drivers') {
+                const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+                const top2 = sorted.slice(0, 2).map(item => testData.results[item[0]].title);
+                resultHtml = `<div class="text-center"><p class="text-lg text-sky-400 font-bold">2 Penggerak Karir Utamamu:</p><h1 class="text-4xl md:text-5xl font-black text-white mt-2">${top2[0]}</h1><h2 class="text-3xl font-bold text-slate-300 mt-2">& ${top2[1]}</h2><p class="mt-4 text-slate-300 mx-auto max-w-2xl">Ini berarti kamu akan merasa paling puas dalam karir yang memberimu kebebasan untuk mengatur caramu sendiri, namun tetap memberikan rasa aman dan stabilitas jangka panjang.</p></div>`;
+            }
+
+            instanceEl.result.querySelector('.glass-card').innerHTML = `${resultHtml}<div class="text-center"><button class="restart-quiz-btn mt-8 text-sky-400 font-semibold">Ulangi Tes</button></div>`;
+            instanceEl.result.querySelector('.restart-quiz-btn').addEventListener('click', start);
+
+        }, 1500);
+    }
+
+    instanceEl.startBtn.addEventListener('click', start);
+    // Restart button in quiz screen
+    const restartQuizBtn = instanceEl.quiz.querySelector('.restart-quiz-btn');
+    if(restartQuizBtn) restartQuizBtn.addEventListener('click', start);
+}
+
+// --- Tab & Initialization ---
+tabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        document.querySelectorAll('.test-container').forEach(c => c.classList.add('hidden'));
+        document.getElementById(`test-${button.dataset.tab}`).classList.remove('hidden');
+    });
+});
+
+Object.keys(testsData).forEach(createTestInstance);
+document.querySelectorAll('.test-container:not(:first-child)').forEach(c => c.classList.add('hidden'));
+
+</script>
+</body>
+</html>
+

@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Akademi Penjualan - 1% Lebih Baik</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0B1120;
+            overflow-x: hidden;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .max-w-8xl { max-width: 90rem; }
+        h1, h2, h3, h4 { font-weight: 900; }
+        .content-area ul {
+            list-style-position: inside;
+            list-style-type: disc;
+            margin-left: 1rem;
+        }
+        .content-area li {
+            margin-bottom: 0.5rem;
+        }
+        #syllabus-panel {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(-100%);
+        }
+        #syllabus-panel.open {
+            transform: translateX(0);
+        }
+        .main-tab-button {
+            border-bottom: 2px solid transparent;
+            transition: all 0.2s ease-in-out;
+        }
+        .main-tab-button.active {
+            color: #38bdf8; /* sky-400 */
+            border-bottom-color: #38bdf8;
+        }
+        .case-study-tab-button.active {
+            background-color: #0ea5e9; /* sky-500 */
+            color: white;
+        }
+         /* Tambahkan style untuk hidden */
+         .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-slate-200">
+
+    <header class="bg-slate-900/80 backdrop-blur-sm shadow-lg fixed top-0 z-50 w-full">
+        <div class="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <a href="HalamanUtama.html" class="flex items-center space-x-2">
+                    <svg width="32" height="32" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M24 4L4 24L24 44L44 24L24 4Z" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/><path d="M34 24L24 34" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    <span class="text-xl font-bold text-white">1% Lebih Baik</span>
+                </a>
+                <nav class="hidden md:flex md:items-center md:space-x-8">
+                    <a href="HalamanUtama.html" class="text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+                    <a href="BerandaBisnis.html" class="text-white font-bold bg-slate-700/50 px-3 py-2 rounded-lg">Bisnis</a>
+                    <a href="BerandaKarir.html" class="text-slate-300 hover:text-sky-400 transition">Karir</a>
+                    <a href="BerandaProduktif.html" class="text-slate-300 hover:text-sky-400 transition">Produktif</a>
+                </nav>
+                 <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-white"><i data-lucide="menu"></i></button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+     <div id="mobile-menu" class="hidden md:hidden fixed inset-0 bg-slate-900/90 backdrop-blur-sm z-40">
+        <div class="flex justify-end p-4">
+            <button id="close-mobile-menu" class="text-white"><i data-lucide="x"></i></button>
+        </div>
+        <div class="flex flex-col items-center justify-center h-full -mt-16 space-y-8">
+            <a href="HalamanUtama.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Halaman Utama</a>
+            <a href="BerandaBisnis.html" class="text-2xl text-white font-bold">Bisnis</a>
+            <a href="BerandaKarir.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Karir</a>
+            <a href="BerandaProduktif.html" class="text-2xl text-slate-300 hover:text-sky-400 transition">Produktif</a>
+        </div>
+    </div>
+    
+    <div class="pt-20">
+        <aside id="syllabus-panel" class="w-80 bg-slate-900/80 backdrop-blur-md border-r border-slate-700 h-screen fixed top-0 left-0 pt-20 flex-shrink-0 z-40 overflow-y-auto">
+             <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold text-white">Silabus</h2>
+                    <button id="close-syllabus-button" class="text-slate-400 hover:text-white"><i data-lucide="x"></i></button>
+                </div>
+                <div id="syllabus-list" class="space-y-4">
+                    </div>
+             </div>
+        </aside>
+
+        <main id="main-content" class="transition-all duration-300">
+            <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+                
+                <div id="intro-view">
+                    <div class="glass-card rounded-2xl p-8 text-center">
+                        <h1 class="text-4xl md:text-5xl font-black text-white">Belajar Seni Berjualan</h1>
+                        <p class="mt-4 text-lg text-slate-300">Di sini, kamu bakal bongkar semua rahasia jualan laris, dari A sampe Z.</p>
+                        <div class="flex justify-center space-x-8 mt-6 text-slate-400">
+                            <span class="flex items-center"><i data-lucide="layers" class="w-5 h-5 mr-2"></i>6 Bab</span>
+                            <span class="flex items-center"><i data-lucide="clock" class="w-5 h-5 mr-2"></i>Estimasi 2 Jam</span>
+                            <span class="flex items-center"><i data-lucide="bar-chart" class="w-5 h-5 mr-2"></i>Pemula - Menengah</span>
+                        </div>
+                        <button id="start-learning-button" class="mt-8 bg-sky-500 hover:bg-sky-600 text-white font-bold py-3 px-8 rounded-lg text-lg transition-all duration-300 transform hover:scale-105">
+                            Mulai Belajar
+                        </button>
+                    </div>
+                </div>
+
+                <div id="academy-view" class="hidden">
+                    <div class="bg-slate-800/50 backdrop-blur-sm p-4 rounded-xl mb-8">
+                         <div class="flex items-center justify-between">
+                            <button id="open-syllabus-button" class="flex items-center space-x-2 text-slate-300 hover:text-white">
+                                <i data-lucide="list"></i>
+                                <span>Silabus</span>
+                            </button>
+                            <div class="w-1/2">
+                                <div class="relative">
+                                    <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500"></i>
+                                    <input type="text" id="search-input" placeholder="Cari strategi... (cth: makanan)" class="w-full bg-slate-700 border-0 rounded-lg pl-10 pr-4 py-2 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none">
+                                </div>
+                            </div>
+                         </div>
+                    </div>
+                    
+                    <div class="content-area glass-card rounded-2xl p-8 md:p-12">
+                        <div class="flex space-x-6 border-b border-slate-700 mb-6">
+                            <button class="main-tab-button pb-2 text-lg font-bold" data-target="main-tab-content-material">Materi Modul</button>
+                            <button class="main-tab-button pb-2 text-lg font-bold" data-target="main-tab-content-notes">Catatan Pribadi</button>
+                        </div>
+                        
+                        <div id="main-tab-content-material" class="space-y-6">
+                            </div>
+                        <div id="main-tab-content-notes" class="hidden">
+                             <h3 class="text-xl font-bold text-white mb-4">Catatan Kamu untuk Modul Ini</h3>
+                             <textarea id="notes-textarea" rows="10" class="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white focus:ring-2 focus:ring-sky-500 focus:outline-none" placeholder="Tulis rangkuman, ide, atau rencana aksimu di sini... Catatanmu akan tersimpan otomatis ke server."></textarea>
+                        </div>
+                    </div>
+
+                     <div class="flex justify-between mt-8">
+                        <button id="prev-button" class="bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 px-4 rounded-lg flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+                            <i data-lucide="arrow-left" class="w-5 h-5 mr-2"></i>
+                            <span>Sebelumnya</span>
+                        </button>
+                        <button id="next-button" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-2 px-4 rounded-lg flex items-center disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span>Selanjutnya</span>
+                            <i data-lucide="arrow-right" class="w-5 h-5 ml-2"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div id="module-data" class="hidden">
+        <div data-id="0.1" data-title="Pengantar: Kenapa Sales adalah Skill Terpenting">
+            <h2 class="text-3xl text-white">Kenapa Sales adalah Skill Penghasil Uang Terbaik</h2>
+            <p>Di antara semua pilar bisnis—SDM, Keuangan, Operasional—hanya Pemasaran dan Penjualan yang secara langsung menghasilkan uang. Tanpa penjualan, bisnis tidak punya "darah" untuk hidup. Menguasai skill menjual berarti kamu memiliki kemampuan paling fundamental untuk menciptakan pendapatan, kapan pun dan di mana pun.</p>
+        </div>
+        <div data-id="0.2" data-title="Cek Tipe Sales Kamu">
+            <h2 class="text-3xl text-white">Cek Tipe Sales Kamu</h2>
+            <p>Sebelum belajar teknik, kenali dulu dirimu. Berdasarkan materi, ada beberapa tipe penjual. Tipe mana yang paling menggambarkan dirimu?</p>
+            <ul>
+                <li><b>Si Agresif:</b> Terlalu memaksa dan gigih, sering membuat calon pembeli tidak nyaman.</li>
+                <li><b>Si Banyak Omong:</b> Terlalu banyak basa-basi hingga lupa tujuan utama untuk menjual.</li>
+                <li><b>Si Konsultan:</b> Fokus bertanya untuk memahami masalah klien dan memberikan solusi yang tulus. Ini adalah tipe ideal.</li>
+                <li><b>Si Cermat:</b> Fokus pada data, fakta, dan detail produk secara sistematis.</li>
+            </ul>
+            <p class="mt-4">Dengan mengetahui tipemu, kamu bisa fokus pada kekuatanmu dan memperbaiki kelemahanmu.</p>
+        </div>
+        <div data-id="1.1" data-title="Kunci 3 Detik Pertama">
+             <h2 class="text-3xl text-white">Kunci 3 Detik Pertama: Tonalitas & Otoritas</h2>
+            <p>Percakapan penjualan ditentukan di 3 detik pertama. Dua hal yang dinilai secara bawah sadar oleh klien adalah:</p>
+            <ul>
+                <li><b>Tonalitas:</b> Cara bicaramu lebih penting dari apa yang kamu bicarakan. Suara yang tenang, terkontrol, dan tidak terlalu bersemangat akan membangun kesan sebagai seorang ahli.</li>
+                <li><b>Otoritas:</b> Klien ingin membeli dari seorang *expert*. Kesan ini dibangun melalui tonalitas dan kepercayaan diri yang kamu pancarkan sejak awal.</li>
+            </ul>
+        </div>
+        <div data-id="1.2" data-title="Membangun Rapport: Jadilah Expert yang Peduli">
+            <h2 class="text-3xl text-white">Membangun Rapport: Jadilah Expert yang Peduli</h2>
+            <p>Lupakan teknik "mirroring" atau meniru gaya klien. Itu terasa palsu. Rapport sejati dibangun saat klien merasa kamu adalah seorang ahli yang benar-benar peduli untuk menyelesaikan masalah mereka. Kuncinya:</p>
+            <ul>
+                <li>Fokus pada kebutuhan mereka, bukan komisimu.</li>
+                <li>Tunjukkan pemahaman mendalam tentang produk dan industrimu.</li>
+                <li>Berikan saran yang jujur, bahkan jika itu berarti merekomendasikan produk yang lebih murah.</li>
+            </ul>
+        </div>
+        <div data-id="1.3" data-title="Teknik Persuasi Dasar">
+            <h2 class="text-3xl text-white">Tiga Senjata Persuasi Dasar</h2>
+            <p>Manfaatkan bias psikologis manusia untuk meyakinkan klien secara etis.</p>
+            <ul>
+                <li><b>Kelangkaan (Scarcity):</b> Orang cenderung lebih menginginkan sesuatu yang terbatas. Gunakan kalimat seperti "Stok tinggal 2 lagi" atau "Promo ini hanya untuk 10 pendaftar pertama".</li>
+                <li><b>Otoritas (Authority):</b> Tunjukkan bahwa kamu adalah seorang ahli. Sebutkan pengalaman, sertifikasi, atau testimoni dari tokoh yang dikenal untuk membangun kredibilitas.</li>
+                <li><b>Timbal Balik (Reciprocity):</b> Berikan sesuatu yang berharga terlebih dahulu (misal: tips gratis, sampel, atau bantuan kecil). Klien akan merasa "tidak enak" dan lebih terbuka untuk mendengarkan penawaranmu.</li>
+            </ul>
+        </div>
+        <div data-id="2.1" data-title="Formula Hollywood: Menjual Pakai Cerita">
+            <h2 class="text-3xl text-white">Formula Hollywood: Menjual Pakai Cerita</h2>
+            <p>Otak manusia dirancang untuk mencerna cerita. Gunakan formula sederhana ini untuk membuat penawaranmu lebih menarik:</p>
+            <ul>
+                <li><b>Setup (Kondisi Awal):</b> Gambarkan situasi atau dunia klien saat ini. "Banyak profesional muda yang sibuk..."</li>
+                <li><b>Conflict (Masalah):</b> Perkenalkan masalah atau tantangan yang mereka hadapi. "...tapi mereka tidak punya waktu untuk menyiapkan makanan sehat."</li>
+                <li><b>Resolution (Solusi):</b> Posisikan produkmu sebagai pahlawan yang menyelesaikan masalah tersebut. "Itulah mengapa Katering Sehat kami hadir untuk..."</li>
+            </ul>
+            <div class="case-study-container mt-6"></div>
+        </div>
+        <div data-id="4.1" data-title="Menjawab Penolakan Harga">
+            <h2 class="text-3xl text-white">"Harganya Kemahalan": Menjawab Penolakan Harga</h2>
+            <p>Ini adalah penolakan paling umum. Jangan panik. Gunakan formula **Empati + Pertanyaan Balik** untuk mengubah perspektif.</p>
+            <p class="mt-2"><b>Formula:</b> "Saya mengerti sekali soal [keberatan klien]. Tapi, boleh saya tahu, apakah [nilai yang lebih tinggi] menjadi prioritas utama Anda?"</p>
+            <div class="case-study-container mt-6"></div>
+        </div>
+         </div>
+    
+    <div id="case-study-data" class="hidden">
+        <div data-module-id="2.1">
+            <div data-industry="Bisnis Makanan">
+                <b>Setup:</b> Pemilik kafe melihat banyak pelanggan yang datang sendirian untuk bekerja.<br>
+                <b>Conflict:</b> Namun, meja yang ada terlalu besar dan kurang nyaman untuk pengguna laptop.<br>
+                <b>Resolution:</b> Akhirnya, ia menyediakan "paket kerja personal" dengan meja khusus, colokan, dan Wi-Fi kencang, yang membuat para pekerja remote betah.
+            </div>
+             <div data-industry="Brand Baju">
+                <b>Setup:</b> Seorang wanita karir butuh pakaian yang terlihat profesional untuk rapat.<br>
+                <b>Conflict:</b> Tapi setelah bekerja, ia ingin langsung nongkrong dengan teman tanpa harus ganti baju yang terlalu formal.<br>
+                <b>Resolution:</b> Brand kami menciptakan "Blazer Hybrid" yang formal saat rapat, namun bisa dilepas bagian lengannya menjadi rompi stylish untuk acara santai.
+            </div>
+        </div>
+        <div data-module-id="4.1">
+             <div data-industry="Bisnis Makanan">
+                <b>Klien:</b> "Wah, harga paket katering sehatnya agak mahal ya."<br>
+                <b>Jawaban Anda:</b> "Saya ngerti banget, Bu, soal perbandingan harga. Tapi boleh tahu, apakah kualitas bahan organik dan jaminan kebersihan jadi prioritas utama Ibu untuk keluarga?"
+            </div>
+            <div data-industry="Brand Baju">
+                <b>Klien:</b> "Duh, suka sama bajunya, tapi harganya lumayan ya."<br>
+                <b>Jawaban Anda:</b> "Paham banget, kak. Boleh aku tanya, kakak lagi cari baju yang awet dan bisa dipakai di banyak acara, kan? Kain premium dan jahitan butik kami memang dirancang untuk itu."
+            </div>
+            <div data-industry="Skincare">
+                <b>Klien:</b> "Serumnya kok harganya lebih tinggi dari brand X?"<br>
+                <b>Jawaban Anda:</b> "Saya ngerti, kak. Kalau boleh tahu, kakak lebih fokus ke hasil yang cepat terlihat atau keamanan bahan aktif untuk kesehatan kulit jangka panjang?"
+            </div>
+             <div data-industry="Jasa">
+                <b>Klien:</b> "Biaya jasa desain agensi Anda lebih mahal dari freelancer ya."<br>
+                <b>Jawaban Anda:</b> "Betul, Pak. Saya paham perbandingannya. Boleh saya pastikan, apakah jaminan revisi tanpa batas dan ketepatan waktu pengerjaan adalah hal yang penting untuk proyek Bapak saat ini?"
+            </div>
+        </div>
+    </div>
+
+
+<script type="module"> // *** UBAH MENJADI type="module" ***
+// ===== MULAI SCRIPT BARU =====
+
+// --- Impor Firebase (BARU) ---
+import { getAuth } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-auth.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+const firebaseConfig = { // Salin dari HalamanUtama.html
+      apiKey: "AIzaSyBZpVN-dFVngkxe6obg3hCeKyPniJb0__Y",
+      authDomain: "project-1-lebih-baik.firebaseapp.com",
+      projectId: "project-1-lebih-baik",
+      storageBucket: "project-1-lebih-baik.firebasestorage.app",
+      messagingSenderId: "153004966709",
+      appId: "1:153004966709:web:9f98e0ba16ae35b18ec27c"
+};
+let app;
+try {
+    app = initializeApp(firebaseConfig);
+} catch (e) {
+    // App mungkin sudah diinisialisasi
+    if (window.firebase?.apps?.length) { // Cek apakah 'firebase' ada di window
+        app = window.firebase.app();
+    } else {
+         console.error("Critical Firebase Initialization Error:", e);
+    }
+}
+const auth = getAuth(app); // Dapatkan instance auth
+// --- Akhir Impor Firebase ---
+
+
+lucide.createIcons();
+
+const el = {
+    // UI Elements
+    mobileMenu: document.getElementById('mobile-menu'),
+    mobileMenuButton: document.getElementById('mobile-menu-button'),
+    closeMobileMenu: document.getElementById('close-mobile-menu'),
+    syllabusPanel: document.getElementById('syllabus-panel'),
+    openSyllabusButton: document.getElementById('open-syllabus-button'),
+    closeSyllabusButton: document.getElementById('close-syllabus-button'),
+    mainContent: document.getElementById('main-content'),
+    
+    // View Containers
+    introView: document.getElementById('intro-view'),
+    academyView: document.getElementById('academy-view'),
+    startLearningButton: document.getElementById('start-learning-button'),
+
+    // Academy Elements
+    syllabusList: document.getElementById('syllabus-list'),
+    contentDisplayMaterial: document.getElementById('main-tab-content-material'),
+    contentDisplayNotes: document.getElementById('main-tab-content-notes'),
+    notesTextarea: document.getElementById('notes-textarea'),
+    mainTabButtons: document.querySelectorAll('.main-tab-button'),
+    prevButton: document.getElementById('prev-button'),
+    nextButton: document.getElementById('next-button'),
+    searchInput: document.getElementById('search-input'),
+    
+    // Data Containers
+    moduleDataContainer: document.getElementById('module-data'),
+    caseStudyDataContainer: document.getElementById('case-study-data'),
+};
+
+const syllabusStructure = [
+    { title: "Fondasi & Mindset Penjual", modules: ["0.1", "0.2"] },
+    { title: "Psikologi & Persiapan", modules: ["1.1", "1.2", "1.3"] },
+    { title: "Teknik Komunikasi Inti", modules: ["2.1"] },
+    { title: "Mengatasi Rintangan", modules: ["4.1"] },
+];
+
+let allModules = [];
+let currentModuleIndex = 0;
+let completedModules = new Set();
+let notes = {}; // Akan diisi oleh API
+
+// --- Logika Auth & API (BARU) ---
+const BACKEND_URL = "http://localhost:3000";
+let saveTimer; // Timer untuk debounce
+
+async function getAuthToken() {
+    await auth.authStateReady(); 
+    const user = auth.currentUser;
+    if (!user || user.isAnonymous) {
+        alert("Anda harus login dulu untuk mengakses materi ini.");
+        window.location.href = "HalamanUtama.html";
+        return null;
+    }
+    try {
+        const token = await user.getIdToken(true); // Paksa refresh
+        sessionStorage.setItem('firebaseIdToken', token);
+        return token;
+    } catch (error) {
+        console.error("Gagal mendapatkan token:", error);
+        sessionStorage.removeItem('firebaseIdToken');
+        window.location.href = 'HalamanUtama.html';
+        return null;
+    }
+}
+
+async function getAuthHeaders() {
+    const token = await getAuthToken();
+    if (!token) {
+        throw new Error("Token tidak tersedia");
+    }
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+    };
+}
+// --- Akhir Logika Auth & API ---
+
+
+// --- UI Interaction Functions (KODE ASLI) ---
+function openSyllabus() {
+    el.syllabusPanel.classList.add('open');
+    if (window.innerWidth >= 768) { 
+        el.mainContent.style.marginLeft = '20rem'; 
+        el.mainContent.style.width = 'calc(100% - 20rem)';
+    }
+}
+function closeSyllabus() {
+    el.syllabusPanel.classList.remove('open');
+    el.mainContent.style.marginLeft = '0';
+    el.mainContent.style.width = '100%';
+}
+function handleResize() {
+    if (!el.syllabusPanel.classList.contains('open')) {
+        el.mainContent.style.marginLeft = '0';
+        el.mainContent.style.width = '100%';
+    } else {
+        if (window.innerWidth < 768) {
+            el.mainContent.style.marginLeft = '0';
+            el.mainContent.style.width = '100%';
+        } else {
+            el.mainContent.style.marginLeft = '20rem';
+            el.mainContent.style.width = 'calc(100% - 20rem)';
+        }
+    }
+}
+
+// --- Academy Core Functions (KODE ASLI) ---
+function initializeSyllabus() {
+    let moduleIndex = 0;
+    syllabusStructure.forEach(chapter => {
+        const chapterDiv = document.createElement('div');
+        chapterDiv.innerHTML = `<h3 class="text-sm font-bold text-slate-400 uppercase tracking-wider mb-2">${chapter.title}</h3>`;
+        const moduleList = document.createElement('ul');
+        moduleList.className = 'space-y-1';
+        
+        chapter.modules.forEach(moduleId => {
+            const moduleEl = el.moduleDataContainer.querySelector(`[data-id='${moduleId}']`);
+            if (moduleEl) {
+                const title = moduleEl.dataset.title;
+                allModules.push({ id: moduleId, title: title, element: moduleEl });
+
+                const li = document.createElement('li');
+                li.innerHTML = `
+                    <a href="#" data-index="${moduleIndex}" class="flex items-start p-2 rounded-md hover:bg-slate-700 transition-colors duration-200 syllabus-item">
+                        <i data-lucide="check-circle" class="w-5 h-5 text-slate-600 mr-3 completion-icon shrink-0 mt-0.5"></i>
+                        <span class="text-slate-300 text-sm">${title}</span>
+                    </a>
+                `;
+                moduleList.appendChild(li);
+                moduleIndex++;
+            }
+        });
+        chapterDiv.appendChild(moduleList);
+        el.syllabusList.appendChild(chapterDiv);
+    });
+    lucide.createIcons();
+
+    document.querySelectorAll('.syllabus-item').forEach(item => {
+        item.addEventListener('click', (e) => {
+            e.preventDefault();
+            goToModule(parseInt(e.currentTarget.dataset.index));
+            if (window.innerWidth < 768) {
+                closeSyllabus();
+            }
+        });
+    });
+}
+function createCaseStudyTabs(moduleId) {
+    const caseStudyData = el.caseStudyDataContainer.querySelector(`[data-module-id='${moduleId}']`);
+    if (!caseStudyData) return '';
+
+    const industries = Array.from(caseStudyData.children).map(child => child.dataset.industry);
+    
+    let tabsHtml = '<div class="flex flex-wrap -mb-px border-b border-slate-700">';
+    industries.forEach((industry, index) => {
+        tabsHtml += `<button class="case-study-tab-button text-sm px-4 py-2 mr-2 rounded-t-md ${index === 0 ? 'active' : 'bg-slate-800/50 text-slate-400'}" data-target="tab-${moduleId}-${index}">${industry}</button>`;
+    });
+    tabsHtml += '</div>';
+
+    let contentHtml = '<div class="mt-4">';
+    Array.from(caseStudyData.children).forEach((child, index) => {
+        contentHtml += `<div id="tab-${moduleId}-${index}" class="tab-content text-sm text-slate-400 ${index > 0 ? 'hidden' : ''}">${child.innerHTML}</div>`;
+    });
+    contentHtml += '</div>';
+
+    return `<div class="mt-8 pt-6 border-t border-slate-700">
+                <h4 class="text-lg font-bold text-white mb-4">Penerapan di Dunia Nyata</h4>
+                ${tabsHtml}
+                ${contentHtml}
+            </div>`;
+}
+function setupTabEvents(container, buttonClass, contentClassPrefix) {
+    container.querySelectorAll(`.${buttonClass}`).forEach(button => {
+        button.addEventListener('click', () => {
+            const parent = button.parentElement;
+            parent.querySelectorAll(`.${buttonClass}`).forEach(btn => {
+                btn.classList.remove('active');
+                btn.classList.add('bg-slate-800/50', 'text-slate-400');
+            });
+            button.classList.add('active');
+            button.classList.remove('bg-slate-800/50', 'text-slate-400');
+            
+            const contentContainer = parent.nextElementSibling;
+            contentContainer.querySelectorAll(`[id^='${contentClassPrefix}']`).forEach(content => content.classList.add('hidden'));
+            document.getElementById(button.dataset.target).classList.remove('hidden');
+        });
+    });
+}
+function goToModule(index) {
+    if (index < 0 || index >= allModules.length) return;
+
+    currentModuleIndex = index;
+    const module = allModules[index];
+    
+    el.contentDisplayMaterial.innerHTML = module.element.innerHTML + createCaseStudyTabs(module.id);
+    setupTabEvents(el.contentDisplayMaterial, 'case-study-tab-button', 'tab-');
+    
+    el.notesTextarea.value = notes[module.id] || ''; // Mengisi catatan dari data API
+    completedModules.add(module.id);
+    
+    updateUI();
+    saveProgress(); // Simpan progres (index & completed) ke localStorage
+}
+function updateUI() {
+    document.querySelectorAll('.syllabus-item').forEach((item, idx) => {
+        const isCurrent = idx === currentModuleIndex;
+        item.classList.toggle('bg-sky-500/10', isCurrent);
+        const textSpan = item.querySelector('.text-slate-300');
+        if (textSpan) textSpan.classList.toggle('text-white', isCurrent);
+    });
+
+    allModules.forEach((mod, idx) => {
+        const icon = document.querySelector(`.syllabus-item[data-index='${idx}'] .completion-icon`);
+        if(icon) {
+            const isCompleted = completedModules.has(mod.id);
+            icon.classList.toggle('text-green-500', isCompleted);
+            icon.classList.toggle('text-slate-600', !isCompleted);
+        }
+    });
+
+    el.prevButton.disabled = currentModuleIndex === 0;
+    el.nextButton.disabled = currentModuleIndex === allModules.length - 1;
+}
+
+// --- Data Persistence (DIMODIFIKASI) ---
+// Hanya menyimpan progres non-catatan ke localStorage
+function saveProgress() {
+    localStorage.setItem('salesAcademyProgress', JSON.stringify({
+        currentModuleIndex,
+        completed: Array.from(completedModules),
+        // 'notes' dihapus dari sini, akan disimpan ke API
+    }));
+}
+
+// Hanya memuat progres non-catatan dari localStorage
+function loadProgress() {
+    const saved = localStorage.getItem('salesAcademyProgress');
+    if (saved) {
+        const progress = JSON.parse(saved);
+        currentModuleIndex = progress.currentModuleIndex || 0;
+        completedModules = new Set(progress.completed || []);
+        // 'notes' dihapus dari sini, akan diambil dari API
+    }
+}
+
+// (BARU) Memuat catatan dari API
+async function loadNotesFromAPI() {
+    console.log("Mencoba memuat catatan dari API...");
+    try {
+        const headers = await getAuthHeaders();
+        const response = await fetch(`${BACKEND_URL}/api/v1/sales-notes`, {
+            headers: headers
+        });
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                 alert("Sesi Anda berakhir. Silakan login ulang.");
+                 sessionStorage.removeItem('firebaseIdToken');
+                 window.location.href = 'HalamanUtama.html';
+                 return;
+            }
+            throw new Error(`Gagal memuat catatan: ${response.statusText}`);
+        }
+        notes = await response.json(); // Mengisi variabel 'notes' global
+        console.log("Catatan berhasil dimuat:", notes);
+    } catch (error) {
+        console.error("Error memuat catatan:", error);
+        if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) { // Hindari error dobel
+             alert("Gagal memuat catatan Anda dari server."); 
+        }
+    }
+}
+
+// (BARU) Menyimpan catatan ke API (dengan debounce)
+async function saveNoteToAPI(moduleId, content) {
+    console.log(`Menyimpan catatan untuk modul ${moduleId}...`);
+    try {
+        const headers = await getAuthHeaders();
+        await fetch(`${BACKEND_URL}/api/v1/sales-notes`, {
+            method: 'POST',
+            headers: headers,
+            body: JSON.stringify({ moduleId, content })
+        });
+        console.log(`Catatan modul ${moduleId} berhasil disimpan.`);
+    } catch (error) {
+        console.error("Gagal menyimpan catatan:", error);
+         if (!(error instanceof Error && error.message.includes("Token tidak tersedia"))) {
+             alert("Gagal menyimpan catatan Anda. Cek koneksi."); 
+         }
+    }
+}
+
+
+// --- Search Functionality (KODE ASLI) ---
+function handleSearch() {
+    const query = el.searchInput.value.toLowerCase().trim();
+    if (query === '') {
+        el.syllabusList.querySelectorAll('div, li').forEach(el => el.style.display = '');
+        return;
+    }
+    let firstMatchIndex = -1;
+    allModules.forEach((module, index) => {
+        const fullText = (module.title + ' ' + module.element.innerText).toLowerCase();
+        const caseStudies = el.caseStudyDataContainer.querySelector(`[data-module-id='${module.id}']`)?.innerText.toLowerCase() || '';
+        const isMatch = fullText.includes(query) || caseStudies.includes(query);
+        const syllabusItem = document.querySelector(`.syllabus-item[data-index='${index}']`).parentElement;
+        syllabusItem.style.display = isMatch ? '' : 'none';
+        if (isMatch && firstMatchIndex === -1) firstMatchIndex = index;
+    });
+    el.syllabusList.querySelectorAll('div > h3').forEach(chapterHeader => {
+        const allItems = chapterHeader.nextElementSibling.querySelectorAll('li');
+        const visibleItems = Array.from(allItems).filter(item => item.style.display !== 'none');
+        chapterHeader.parentElement.style.display = visibleItems.length > 0 ? '' : 'none';
+    });
+    if (firstMatchIndex !== -1) goToModule(firstMatchIndex);
+}
+
+// --- Event Listeners (DIMODIFIKASI) ---
+el.mobileMenuButton.addEventListener('click', () => el.mobileMenu.classList.remove('hidden'));
+el.closeMobileMenu.addEventListener('click', () => el.mobileMenu.classList.add('hidden'));
+el.openSyllabusButton.addEventListener('click', (e) => { e.stopPropagation(); openSyllabus(); });
+el.closeSyllabusButton.addEventListener('click', closeSyllabus);
+document.body.addEventListener('click', (e) => {
+    if (el.syllabusPanel.classList.contains('open') && !el.syllabusPanel.contains(e.target) && !el.openSyllabusButton.contains(e.target)) {
+        closeSyllabus();
+    }
+});
+window.addEventListener('resize', handleResize);
+
+// (DIMODIFIKASI) Tombol Mulai Belajar sekarang juga memuat catatan dari API
+el.startLearningButton.addEventListener('click', async () => {
+    try {
+        await loadNotesFromAPI(); // Muat catatan dari API
+        el.introView.classList.add('hidden');
+        el.academyView.classList.remove('hidden');
+        goToModule(currentModuleIndex); // Baru tampilkan modul
+    } catch (error) {
+         console.error("Gagal memulai pembelajaran:", error);
+         // Penanganan error (misalnya token tidak valid) sudah ada di dalam loadNotesFromAPI
+    }
+});
+
+el.prevButton.addEventListener('click', () => goToModule(currentModuleIndex - 1));
+el.nextButton.addEventListener('click', () => goToModule(currentModuleIndex + 1));
+el.searchInput.addEventListener('input', handleSearch);
+
+el.mainTabButtons.forEach(button => {
+    button.addEventListener('click', () => {
+        el.mainTabButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        el.contentDisplayMaterial.classList.toggle('hidden', button.dataset.target !== 'main-tab-content-material');
+        el.contentDisplayNotes.classList.toggle('hidden', button.dataset.target !== 'main-tab-content-notes');
+    });
+});
+
+// (DIMODIFIKASI) Listener input catatan sekarang memanggil API dengan debounce
+el.notesTextarea.addEventListener('input', () => {
+    const currentModuleId = allModules[currentModuleIndex].id;
+    const content = el.notesTextarea.value;
+    
+    // Simpan ke state lokal (agar UI responsif)
+    notes[currentModuleId] = content;
+    
+    // Hapus timer lama jika ada
+    clearTimeout(saveTimer);
+    
+    // Atur timer baru untuk menyimpan ke API setelah 1 detik
+    saveTimer = setTimeout(() => {
+        saveNoteToAPI(currentModuleId, content);
+    }, 1000); // 1 detik debounce
+});
+
+// --- Initialization ---
+document.addEventListener('DOMContentLoaded', async () => { // Jadikan async
+    try {
+        await getAuthToken(); // Coba ambil token saat load, ini akan handle jika user tidak login
+    } catch(e) {
+        // Error sudah dihandle di getAuthToken
+    }
+    
+    // Cek token lagi setelah mencoba mengambilnya
+    const token = sessionStorage.getItem('firebaseIdToken');
+    if (!token) {
+        // Jika tidak ada token, paksa ke Halaman Utama
+         el.introView.innerHTML = `
+            <div class="glass-card rounded-2xl p-8 text-center">
+                <h1 class="text-3xl md:text-4xl font-black text-white mb-4">Akses Ditolak</h1>
+                <p class="text-lg text-slate-400 mb-10">Anda harus login terlebih dahulu di Halaman Utama untuk mengakses materi ini.</p>
+                <a href="HalamanUtama.html" class="bg-sky-500 hover:bg-sky-600 text-white font-bold py-4 px-10 rounded-lg text-xl">
+                    Ke Halaman Utama
+                </a>
+            </div>
+        `;
+        // Pastikan hanya intro view yang tampil
+        el.introView.classList.remove('hidden');
+        el.academyView.classList.add('hidden');
+        lucide.createIcons(); // Jalankan icons untuk tombol close mobile menu
+        return; // Hentikan inisialisasi lebih lanjut
+    }
+
+    initializeSyllabus();
+    loadProgress(); // Memuat progres (index & completed) dari localStorage
+    el.mainTabButtons[0].classList.add('active');
+});
+
+// ===== AKHIR SCRIPT BARU =====
+</script>
+</body>
+</html>
