@@ -139,7 +139,7 @@ const checkAuth = async (req, res, next) => {
 // =================================================================
 // (B) API PROXY (pakai logger)
 // =================================================================
-const GOOGLE_API_URL = `https...`;
+const GOOGLE_API_KEY = `https...`;
 app.post('/api/v1/generate', checkAuth, async (req, res) => {
     // ... (kode generate kamu) ...
 });
