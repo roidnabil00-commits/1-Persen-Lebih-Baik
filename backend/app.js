@@ -82,7 +82,8 @@ const app = express();
 const whitelist = [
     'http://localhost:5500', 
     'http://127.0.0.1:5500', 
-    // 'https://proyek-kamu.vercel.app' // <-- NANTI TAMBAHKAN URL VERCEL KAMU
+    'https://1-persen-lebih-baik.vercel.app', // <-- TAMBAHKAN INI (URL Asli)
+    'https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app' // <-- TAMBAHKAN INI (URL Preview)
 ];
 const corsOptions = {
     origin: function (origin, callback) {
@@ -139,7 +140,7 @@ const checkAuth = async (req, res, next) => {
 // =================================================================
 // (B) API PROXY (pakai logger)
 // =================================================================
-const GOOGLE_API_KEY = `https...`;
+const GOOGLE_API_URL = `https...`;
 app.post('/api/v1/generate', checkAuth, async (req, res) => {
     // ... (kode generate kamu) ...
 });

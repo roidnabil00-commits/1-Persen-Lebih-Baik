@@ -233,7 +233,7 @@ el.generateStrategyBtn.addEventListener('click', async () => {
             Pastikan jawabanmu bersih dari karakter aneh seperti *, #, }, [, atau ].
         `;
 
-        const apiUrl = `http://localhost:3000/api/v1/generate`; // <-- URL Backend
+        const BACKEND_URL = "";
         const payload = { contents: [{ parts: [{ text: fullPrompt }] }] };
 
         // *** MODIFIKASI 2: Tambahkan Header Authorization ***
