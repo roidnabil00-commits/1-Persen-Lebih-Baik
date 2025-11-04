@@ -25,31 +25,6 @@ const logger = pino({
     transport: transport,
     level: 'info'
 });
-
-// --- Inisialisasi Kunci Servis Firebase ---
-try {
-    const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
-    const serviceAccount = {
-      projectId: process.env.FIREBASE_PROJECT_ID,
-      clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: privateKey 
-    };
-
-    if (!serviceAccount.privateKey || !serviceAccount.projectId || !serviceAccount.clientEmail) {
-        throw new Error('Variabel Firebase (PROJECT_ID, CLIENT_EMAIL, atau PRIVATE_KEY) tidak lengkap di Vercel.');
-    }
-
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    });
-    logger.info('Firebase Admin berhasil diinisialisasi (Metode Langsung).');
-
-} catch (e) {
-    logger.error({ err: e }, 'FATAL: Gagal inisialisasi Firebase Admin! Cek format Environment Variables di Vercel.');
-    console.error('FATAL: Gagal inisialisasi Firebase Admin! Cek format Environment Variables di Vercel.', e.message);
-    process.exit(1);
-}
-
 // --- Inisialisasi Express ---
 const app = express();
 
