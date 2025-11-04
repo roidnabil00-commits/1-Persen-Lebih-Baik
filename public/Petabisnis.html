@@ -663,7 +663,7 @@ async function callGemini(prompt, button, text, loader, outputElement) {
     button.disabled = true;
 
     try {
-        const apiUrl = `http://localhost:3000/api/v1/generate`; // <-- URL Backend
+        const apiUrl = `${BACKEND_URL}/api/v1/generate`;
         const payload = { contents: [{ parts: [{ text: prompt }] }] };
 
         const response = await fetch(apiUrl, {

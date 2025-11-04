@@ -525,7 +525,7 @@ el.generateAiRoadmapBtn.addEventListener('click', async () => {
             ... (Sisa prompt Anda)
         `;
         
-        const apiUrl = `http://localhost:3000/api/v1/generate`; 
+        const apiUrl = `${BACKEND_URL}/api/v1/generate`;
         const payload = { contents: [{ parts: [{ text: prompt }] }] };
 
         // ** Tambahkan await dan header di sini **
