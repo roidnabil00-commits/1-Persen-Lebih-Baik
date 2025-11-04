@@ -12,17 +12,31 @@ const multer = require('multer');
 const pdfParse = require('pdf-parse');
 const pino = require('pino');
 
-// --- Konfigurasi Pino Logger ---
-const logger = pino({
-    transport: {
+// --- Konfigurasi Pino Logger (VERSI BARU UNTUK VERCEL) ---
+
+// Tentukan target transport berdasarkan environment
+// Vercel otomatis mengatur NODE_ENV = 'production'
+const transport = process.env.NODE_ENV === 'production'
+  // Jika di Vercel (production), log ke console (standar output)
+  ? {
+        target: 'pino-pretty',
+        options: {
+            colorize: true // Boleh colorize di log Vercel
+        }
+    }
+  // Jika di lokal (development), log ke file
+  : {
         target: 'pino-pretty',
         options: {
             colorize: false,
-            destination: './server.log',
+            destination: './server.log', // Hanya dipakai di lokal
             sync: true, 
             mkdir: true
         }
-    },
+    };
+
+const logger = pino({
+    transport: transport,
     level: 'info'
 });
 // ... (Logger check tidak berubah) ...
