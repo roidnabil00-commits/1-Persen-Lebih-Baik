@@ -1,11 +1,11 @@
-// File: backend/app.js (Versi FINAL - Helmet, CORS, Rate Limit)
+// File: backend/app.js (Versi FINAL - Perbaikan untuk Vercel)
 
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 const cors = require('cors');
 const helmet = require('helmet');
-const rateLimit = require('express-rate-limit'); // <-- 1. DIIMPOR DI SINI
+const rateLimit = require('express-rate-limit');
 const admin = require('firebase-admin');
 const { PrismaClient } = require('@prisma/client');
 const multer = require('multer');
@@ -42,14 +42,17 @@ const logger = pino({
 // ... (Logger check tidak berubah) ...
 
 // --- Inisialisasi Kunci Servis & Prisma ---
-// --- Inisialisasi Kunci Servis & Prisma ---
 try {
     // Kita HANYA akan membaca langsung dari Environment Variables
-    // Tanpa .replace() sama sekali.
+    
+    // !!! INI DIA PERBAIKANNYA (Solusi 1) !!!
+    // Kita ganti "\\n" (teks) menjadi "\n" (baris baru)
+    const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
+
     const serviceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: process.env.FIREBASE_PRIVATE_KEY 
+      privateKey: privateKey // <-- Gunakan privateKey yang sudah diformat
     };
 
     // Cek apakah semua variabel ada
@@ -83,6 +86,11 @@ const whitelist = [
 ];
 const corsOptions = {
     origin: function (origin, callback) {
+        // (Tambahkan URL Vercel kamu di sini setelah deploy, Sesuai Solusi 3)
+         if (origin === 'https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app') {
+             whitelist.push('https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app');
+         }
+
         if (whitelist.indexOf(origin) !== -1 || !origin) {
             callback(null, true);
         } else {
