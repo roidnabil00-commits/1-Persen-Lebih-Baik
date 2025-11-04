@@ -1,4 +1,4 @@
-// File: backend/app.js (Versi FINAL - Perbaikan untuk Vercel)
+// File: backend/app.js (Versi FINAL - Lengkap)
 
 require('dotenv').config();
 const express = require('express');
@@ -7,56 +7,34 @@ const cors = require('cors');
 const helmet = require('helmet');
 const rateLimit = require('express-rate-limit');
 const admin = require('firebase-admin');
-const { PrismaClient } = require('@prisma/client');
+const { PrismaClient } = require('@prisma/client'); // <-- PENTING
 const multer = require('multer');
 const pdfParse = require('pdf-parse');
 const pino = require('pino');
+
+// --- Inisialisasi Klien & Variabel ---
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
+const prisma = new PrismaClient(); // <-- PENTING
 
 // --- Konfigurasi Pino Logger (VERSI BARU UNTUK VERCEL) ---
-
-// Tentukan target transport berdasarkan environment
-// Vercel otomatis mengatur NODE_ENV = 'production'
 const transport = process.env.NODE_ENV === 'production'
-  // Jika di Vercel (production), log ke console (standar output)
-  ? {
-        target: 'pino-pretty',
-        options: {
-            colorize: true // Boleh colorize di log Vercel
-        }
-    }
-  // Jika di lokal (development), log ke file
-  : {
-        target: 'pino-pretty',
-        options: {
-            colorize: false,
-            destination: './server.log', // Hanya dipakai di lokal
-            sync: true, 
-            mkdir: true
-        }
-    };
+  ? { target: 'pino-pretty', options: { colorize: true } }
+  : { target: 'pino-pretty', options: { colorize: false, destination: './server.log', sync: true, mkdir: true } };
 
 const logger = pino({
     transport: transport,
     level: 'info'
 });
-// ... (Logger check tidak berubah) ...
 
-// --- Inisialisasi Kunci Servis & Prisma ---
+// --- Inisialisasi Kunci Servis Firebase ---
 try {
-    // Kita HANYA akan membaca langsung dari Environment Variables
-    
-    // !!! INI DIA PERBAIKANNYA (Solusi 1) !!!
-    // Kita ganti "\\n" (teks) menjadi "\n" (baris baru)
     const privateKey = process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n');
-
     const serviceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      privateKey: privateKey // <-- Gunakan privateKey yang sudah diformat
+      privateKey: privateKey 
     };
 
-    // Cek apakah semua variabel ada
     if (!serviceAccount.privateKey || !serviceAccount.projectId || !serviceAccount.clientEmail) {
         throw new Error('Variabel Firebase (PROJECT_ID, CLIENT_EMAIL, atau PRIVATE_KEY) tidak lengkap di Vercel.');
     }
@@ -79,20 +57,14 @@ const app = express();
 // (A) KONFIGURASI KEAMANAN (CORS, HELMET, RATE LIMIT)
 // =================================================================
 
-// --- Konfigurasi CORS Ketat ---
 const whitelist = [
     'http://localhost:5500', 
     'http://127.0.0.1:5500', 
-    'https://1-persen-lebih-baik.vercel.app', // <-- TAMBAHKAN INI (URL Asli)
-    'https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app' // <-- TAMBAHKAN INI (URL Preview)
+    'https://1-persen-lebih-baik.vercel.app', 
+    'https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app' 
 ];
 const corsOptions = {
     origin: function (origin, callback) {
-        // (Tambahkan URL Vercel kamu di sini setelah deploy, Sesuai Solusi 3)
-         if (origin === 'https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app') {
-             whitelist.push('https://1-persen-lebih-baik-bvcty6zgz-roidnabil00-commits.vercel.app');
-         }
-
         if (whitelist.indexOf(origin) !== -1 || !origin) {
             callback(null, true);
         } else {
@@ -102,45 +74,50 @@ const corsOptions = {
     }
 };
 
-// --- Konfigurasi Rate Limiter ---
-// Batasi setiap IP untuk 100 request per 15 menit
 const limiter = rateLimit({
-	windowMs: 15 * 60 * 1000, // 15 menit
-	max: 100, // maks 100 request per IP per 15 menit
+	windowMs: 15 * 60 * 1000, 
+	max: 100, 
 	message: 'Terlalu banyak request dari IP ini, silakan coba lagi setelah 15 menit',
-    standardHeaders: true, // Kirim info rate limit di header `RateLimit-*`
-    legacyHeaders: false, // Nonaktifkan header `X-RateLimit-*`
+    standardHeaders: true, 
+    legacyHeaders: false, 
 });
 
-// --- Terapkan Middleware Keamanan ---
-// Middleware harus diterapkan dalam urutan ini
-app.use(cors(corsOptions)); // 1. Terapkan CORS
-app.use(helmet()); // 2. Terapkan Helmet
-app.use(limiter); // <-- 3. TERAPKAN RATE LIMITER GLOBAL
-app.use(express.json()); // 4. Terapkan JSON parser
+app.use(cors(corsOptions)); 
+app.use(helmet()); 
+app.use(limiter); 
+app.use(express.json()); 
 
 // =================================================================
-
-const upload = multer({
-    // ... (kode multer tidak berubah) ...
-});
-
-// --- Middleware Logging ---
-// ... (kode logging tidak berubah) ...
-
-const PORT = process.env.PORT || 3000;
+// (B) KONFIGURASI UPLOAD (Multer)
+// =================================================================
+// Konfigurasi Multer untuk menyimpan file di memory
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
 // =================================================================
-// (A) MIDDLEWARE AUTENTIKASI (checkAuth)
-// ... (Semua kode API kamu dari checkAuth sampai akhir TIDAK BERUBAH) ...
+// (C) MIDDLEWARE AUTENTIKASI (checkAuth)
 // =================================================================
 const checkAuth = async (req, res, next) => {
-    // ... (kode checkAuth kamu) ...
+    if (!req.headers.authorization || !req.headers.authorization.startsWith('Bearer ')) {
+        logger.warn('Token tidak ada atau format salah');
+        return res.status(401).json({ message: 'Token tidak ada atau format salah' });
+    }
+    const idToken = req.headers.authorization.split('Bearer ')[1];
+    try {
+        const decodedToken = await admin.auth().verifyIdToken(idToken);
+        req.uid = decodedToken.uid; // attach uid to request
+        next(); // Lolos, lanjut ke rute API
+    } catch (error) {
+        logger.error({ err: error }, 'Token tidak valid');
+        return res.status(403).json({ message: 'Token tidak valid' });
+    }
 };
 
 // =================================================================
-// (B) API PROXY (pakai logger)
+// (D) RUTE API
 // =================================================================
+
+// --- D.1: API AI (Generate) ---
 const GOOGLE_API_URL = `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GOOGLE_API_KEY}`;
 
 app.post('/api/v1/generate', checkAuth, async (req, res) => {
@@ -168,9 +145,7 @@ app.post('/api/v1/generate', checkAuth, async (req, res) => {
     }
 });
 
-// =================================================================
-// (B.2) API PROSES UPLOAD CV
-// =================================================================
+// --- D.2: API AI (Proses CV) ---
 app.post('/api/v1/process-cv', checkAuth, upload.single('cvFile'), async (req, res) => {
     logger.info(`[${req.uid}] Menerima request ke /api/v1/process-cv`);
 
@@ -183,31 +158,21 @@ app.post('/api/v1/process-cv', checkAuth, upload.single('cvFile'), async (req, r
     }
 
     try {
-        // 1. Parse PDF
         const dataBuffer = req.file.buffer;
         const data = await pdfParse(dataBuffer);
         const cvText = data.text;
         
         logger.info(`[${req.uid}] Berhasil mem-parsing ${req.file.originalname}`);
-
-        // 2. Ambil promptId dari body
-        const promptId = req.body.promptId || 'polish'; // default 'polish'
-
-        // 3. Tentukan prompt berdasarkan promptId
+        const promptId = req.body.promptId || 'polish'; 
         let systemPrompt;
         if (promptId === 'job-scout') {
             systemPrompt = "Kamu adalah AI Job Hunter. Analisis teks CV ini dan berikan 5 link pencarian JobStreet atau LinkedIn yang paling relevan. Format HANYA JSON: [{\"portal_name\": \"JobStreet\", \"search_link\": \"https://...\"}, ...]";
         } else {
-            // Default: 'polish'
             systemPrompt = "Kamu adalah HRD profesional. Review teks CV ini. Berikan feedback dalam format JSON: {\"versi_baru\": \"(Tulis ulang bagian 'Pengalaman Kerja' atau 'Tentang Saya' jadi 1 paragraf singkat yang profesional)\", \"poin_perbaikan\": [\"(Poin 1 perbaikan)\", \"(Poin 2 perbaikan)\"], \"kritik_saran\": [\"(Kritik 1)\", \"(Kritik 2)\"], \"skor_ats\": 85}";
         }
 
         const prompt = `${systemPrompt}\n\nBerikut adalah teks CV-nya:\n${cvText}`;
-
-        // 4. Kirim ke Google AI
-        const payload = {
-            contents: [{ parts: [{ text: prompt }] }]
-        };
+        const payload = { contents: [{ parts: [{ text: prompt }] }] };
         const response = await axios.post(GOOGLE_API_URL, payload, {
             headers: { 'Content-Type': 'application/json' }
         });
@@ -229,53 +194,220 @@ app.post('/api/v1/process-cv', checkAuth, upload.single('cvFile'), async (req, r
     }
 });
 
-// =================================================================
-// (C) API SINKRONISASI USER
-// =================================================================
+// --- D.3: API Sinkronisasi User ---
 app.post('/api/v1/auth/sync', checkAuth, async (req, res) => {
-    // ... (kode auth/sync kamu) ...
+    const { email, nama } = req.body;
+    const uid = req.uid; 
+    logger.info(`[${uid}] Sync request untuk email: ${email}`);
+    
+    try {
+        const user = await prisma.user.upsert({
+            where: { id: uid },
+            update: { email: email, nama: nama || 'User Baru' },
+            create: { id: uid, email: email, nama: nama || 'User Baru' },
+        });
+        logger.info(`[${uid}] User berhasil disinkronisasi`);
+        res.json({ message: 'User tersinkronisasi', user });
+    } catch (error) {
+        logger.error({ err: error }, 'Gagal sinkronisasi user');
+        res.status(500).json({ message: 'Gagal sinkronisasi database' });
+    }
 });
 
-// =================================================================
-// (D) API TO-DO LIST
-// =================================================================
-app.get('/api/v1/todos', checkAuth, async (req, res) => { /* ... */ });
-app.post('/api/v1/todos', checkAuth, async (req, res) => { /* ... */ });
-app.put('/api/v1/todos/:id', checkAuth, async (req, res) => { /* ... */ });
-app.delete('/api/v1/todos/:id', checkAuth, async (req, res) => { /* ... */ });
+// --- D.4: API To-Do List (Produktif) ---
+app.get('/api/v1/todos', checkAuth, async (req, res) => {
+    logger.info(`[${req.uid}] Mengambil todos`);
+    const todos = await prisma.todo.findMany({
+        where: { userId: req.uid },
+        orderBy: { createdAt: 'asc' },
+    });
+    res.json(todos);
+});
+
+app.post('/api/v1/todos', checkAuth, async (req, res) => {
+    const { text } = req.body;
+    if (!text) {
+        return res.status(400).json({ message: 'Teks tidak boleh kosong' });
+    }
+    logger.info(`[${req.uid}] Membuat todo baru: ${text}`);
+    const newTodo = await prisma.todo.create({
+        data: { text: text, userId: req.uid },
+    });
+    res.status(201).json(newTodo);
+});
+
+app.put('/api/v1/todos/:id', checkAuth, async (req, res) => {
+    const { completed } = req.body;
+    const todoId = parseInt(req.params.id);
+    logger.info(`[${req.uid}] Mengupdate todo ${todoId}`);
+    try {
+        const updatedTodo = await prisma.todo.updateMany({
+            where: { id: todoId, userId: req.uid },
+            data: { completed: completed },
+        });
+        if (updatedTodo.count === 0) {
+            return res.status(404).json({ message: 'Todo tidak ditemukan' });
+        }
+        // Kirim respons sukses tapi tidak perlu body
+        res.status(200).json({ message: 'Todo diupdate' }); 
+    } catch (error) {
+        res.status(500).json({ message: 'Gagal mengupdate todo' });
+    }
+});
+
+app.delete('/api/v1/todos/:id', checkAuth, async (req, res) => {
+    const todoId = parseInt(req.params.id);
+    logger.info(`[${req.uid}] Menghapus todo ${todoId}`);
+    try {
+        const deleted = await prisma.todo.deleteMany({
+            where: { id: todoId, userId: req.uid },
+        });
+        if (deleted.count === 0) {
+            return res.status(404).json({ message: 'Todo tidak ditemukan' });
+        }
+        res.status(204).send();
+    } catch (error) {
+        res.status(500).json({ message: 'Gagal menghapus todo' });
+    }
+});
+
+// --- D.5: API Sales Notes (Bisnis) ---
+app.get('/api/v1/sales-notes', checkAuth, async (req, res) => {
+    logger.info(`[${req.uid}] Mengambil sales notes`);
+    const notes = await prisma.salesNote.findMany({ where: { userId: req.uid } });
+    const notesMap = notes.reduce((acc, note) => {
+        acc[note.moduleId] = note.content;
+        return acc;
+    }, {});
+    res.json(notesMap);
+});
+
+app.post('/api/v1/sales-notes', checkAuth, async (req, res) => {
+    const { moduleId, content } = req.body;
+    if (!moduleId || content === undefined) {
+        return res.status(400).json({ message: 'moduleId dan content diperlukan' });
+    }
+    logger.info(`[${req.uid}] Upsert sales note untuk modul ${moduleId}`);
+    const upsertedNote = await prisma.salesNote.upsert({
+        where: { userId_moduleId: { userId: req.uid, moduleId: moduleId } },
+        update: { content: content },
+        create: { userId: req.uid, moduleId: moduleId, content: content },
+    });
+    res.json(upsertedNote);
+});
+
+// --- D.6: API Career Map (Karir) ---
+app.get('/api/v1/career-map', checkAuth, async (req, res) => {
+    logger.info(`[${req.uid}] Mengambil career map`);
+    const map = await prisma.careerMap.findUnique({
+        where: { userId: req.uid },
+    });
+    res.json(map || {}); 
+});
+
+app.post('/api/v1/career-map', checkAuth, async (req, res) => {
+    const { goal, hardSkills, softSkills, skillGap } = req.body;
+    if (goal === undefined || hardSkills === undefined || softSkills === undefined || skillGap === undefined) {
+        return res.status(400).json({ message: 'Semua field (goal, hardSkills, softSkills, skillGap) diperlukan' });
+    }
+    logger.info(`[${req.uid}] Upsert career map`);
+    const upsertedMap = await prisma.careerMap.upsert({
+        where: { userId: req.uid },
+        update: { goal, hardSkills, softSkills, skillGap },
+        create: { userId: req.uid, goal, hardSkills, softSkills, skillGap },
+    });
+    res.json(upsertedMap);
+});
+
+// --- D.7: API Business Map (Bisnis) ---
+app.get('/api/v1/business-map', checkAuth, async (req, res) => {
+    logger.info(`[${req.uid}] Mengambil business map`);
+    const map = await prisma.businessMap.findUnique({
+        where: { userId: req.uid },
+    });
+    res.json(map || {});
+});
+
+app.post('/api/v1/business-map', checkAuth, async (req, res) => {
+    const { personalStory, riskProfile, skill, capital, time, knowledge, connections, opportunities } = req.body;
+    
+    if (!personalStory || !riskProfile || !skill || !capital || !time || !knowledge || !connections || !opportunities) {
+        return res.status(400).json({ message: 'Data Peta Bisnis tidak lengkap' });
+    }
+    
+    logger.info(`[${req.uid}] Upsert business map`);
+    
+    const dataToSave = {
+        personalStory: personalStory,
+        currentActivity: riskProfile.activity,
+        maritalStatus: riskProfile.marital,
+        emergencyFund: riskProfile.fund,
+        skill: skill,
+        capital: capital,
+        time: time,
+        knowledge: knowledge,
+        connections: connections, 
+        opportunities: opportunities,
+    };
+
+    const upsertedMap = await prisma.businessMap.upsert({
+        where: { userId: req.uid },
+        update: dataToSave,
+        create: { userId: req.uid, ...dataToSave },
+    });
+    res.json(upsertedMap);
+});
+
+// --- D.8: API Daily Dashboard (Produktif) ---
+app.get('/api/v1/dashboard', checkAuth, async (req, res) => {
+    const { date } = req.query; 
+    if (!date) {
+        return res.status(400).json({ message: 'Query parameter "date" diperlukan' });
+    }
+    logger.info(`[${req.uid}] Mengambil dashboard untuk tanggal ${date}`);
+    const dashboard = await prisma.dailyDashboard.findUnique({
+        where: { userId_dateString: { userId: req.uid, dateString: date } },
+    });
+    res.json(dashboard || {});
+});
+
+app.post('/api/v1/dashboard', checkAuth, async (req, res) => {
+    const { dateString, bigWin, schedule, reviewAchieved, reviewBest, reviewLesson } = req.body;
+    if (!dateString) {
+        return res.status(400).json({ message: 'dateString diperlukan' });
+    }
+    
+    logger.info(`[${req.uid}] Upsert dashboard untuk tanggal ${dateString}`);
+    
+    const dataToSave = {
+        bigWin: bigWin,
+        schedule: schedule, 
+        reviewAchieved: reviewAchieved,
+        reviewBest: reviewBest,
+        reviewLesson: reviewLesson,
+    };
+
+    const upsertedDashboard = await prisma.dailyDashboard.upsert({
+        where: { userId_dateString: { userId: req.uid, dateString: dateString } },
+        update: dataToSave,
+        create: { userId: req.uid, dateString: dateString, ...dataToSave },
+    });
+    res.json(upsertedDashboard);
+});
+
 
 // =================================================================
-// (D.2) API SALES NOTES
-// =================================================================
-app.get('/api/v1/sales-notes', checkAuth, async (req, res) => { /* ... */ });
-app.post('/api/v1/sales-notes', checkAuth, async (req, res) => { /* ... */ });
-
-// =================================================================
-// (D.3) API CAREER MAP
-// =================================================================
-app.get('/api/v1/career-map', checkAuth, async (req, res) => { /* ... */ });
-app.post('/api/v1/career-map', checkAuth, async (req, res) => { /* ... */ });
-
-// =================================================================
-// (D.4) API BUSINESS MAP
-// =================================================================
-app.get('/api/v1/business-map', checkAuth, async (req, res) => { /* ... */ });
-app.post('/api/v1/business-map', checkAuth, async (req, res) => { /* ... */ });
-
-// =================================================================
-// (D.5) API DAILY DASHBOARD
-// =================================================================
-app.get('/api/v1/dashboard', checkAuth, async (req, res) => { /* ... */ });
-app.post('/api/v1/dashboard', checkAuth, async (req, res) => { /* ... */ });
-
-// =================================================================
-// (F) GLOBAL ERROR HANDLER
+// (E) GLOBAL ERROR HANDLER
 // =================================================================
 app.use((err, req, res, next) => {
-    // ... (kode error handler kamu) ...
+    logger.error({ err: err }, 'Terjadi error tidak terduga di server');
+    res.status(500).json({ 
+        message: 'Terjadi kesalahan internal server', 
+        error: err.message 
+    });
 });
 
 // =================================================================
-// (E) Ekspor 'app' (untuk testing)
+// (F) Ekspor 'app' (untuk testing dan Vercel)
 // =================================================================
 module.exports = { app, logger };
