@@ -29,14 +29,25 @@ const logger = pino({
 
 // --- Inisialisasi Kunci Servis & Prisma ---
 // --- Inisialisasi Kunci Servis & Prisma ---
+// --- Inisialisasi Kunci Servis & Prisma ---
 try {
-    // Kita ambil 3 nilai terpisah dari Environment Variables
+    const rawPrivateKey = process.env.FIREBASE_PRIVATE_KEY;
+
+    if (!rawPrivateKey) {
+        throw new Error('FIREBASE_PRIVATE_KEY environment variable is not set.');
+    }
+
+    // KODE PINTAR: Cek apakah key-nya berisi teks '\n' (format 1 baris)
+    // atau sudah berisi baris baru asli (format multi-baris).
+    // Ini akan menangani kedua kasus tersebut.
+    const privateKey = rawPrivateKey.includes('\\n')
+        ? rawPrivateKey.replace(/\\n/g, '\n')
+        : rawPrivateKey;
+
     const serviceAccount = {
       projectId: process.env.FIREBASE_PROJECT_ID,
       clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-      // Ini trik penting: Kita ganti karakter '\n' (teks) 
-      // menjadi karakter newline (\n) asli
-      privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+      privateKey: privateKey // Gunakan key yang sudah diproses
     };
 
     admin.initializeApp({
@@ -45,8 +56,8 @@ try {
     logger.info('Firebase Admin berhasil diinisialisasi.');
 
 } catch (e) {
-    logger.error({ err: e }, 'FATAL: Gagal memuat serviceAccountKey.json atau inisialisasi Firebase Admin! Cek file dan konfigurasinya.');
-    console.error('FATAL: Gagal memuat serviceAccountKey.json atau inisialisasi Firebase Admin! Cek file dan konfigurasinya.');
+    logger.error({ err: e }, 'FATAL: Gagal inisialisasi Firebase Admin! Cek Environment Variables.');
+    console.error('FATAL: Gagal inisialisasi Firebase Admin! Cek Environment Variables.', e.message);
     process.exit(1);
 }
 
