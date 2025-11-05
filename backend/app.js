@@ -12,6 +12,36 @@ const multer = require('multer');
 const pdfParse = require('pdf-parse');
 const pino = require('pino');
 
+// --- Inisialisasi Firebase Admin ---
+try {
+  if (process.env.NODE_ENV === 'production') {
+    // Lingkungan Produksi (Vercel)
+    // Kita akan mengambil JSON dari environment variable
+    if (!process.env.GOOGLE_SERVICE_ACCOUNT_JSON) {
+      throw new Error('Variabel GOOGLE_SERVICE_ACCOUNT_JSON tidak diset di Vercel.');
+    }
+    const serviceAccount = JSON.parse(process.env.GOOGLE_SERVICE_ACCOUNT_JSON);
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+    logger.info('Firebase Admin SDK (Produksi) berhasil diinisialisasi.');
+  } else {
+    // Lingkungan Lokal (Laptop Anda)
+    // Kita mengambil dari file fisik
+    const serviceAccount = require('./serviceAccountkey.json');
+    admin.initializeApp({
+      credential: admin.credential.cert(serviceAccount)
+    });
+    logger.info('Firebase Admin SDK (Lokal) berhasil diinisialisasi.');
+  }
+} catch (error) {
+  logger.fatal(error, 'KRITIS: Gagal menginisialisasi Firebase Admin SDK!');
+  // Hentikan aplikasi jika Firebase gagal, karena auth tidak akan berfungsi
+  process.exit(1); 
+}
+
+// [KODE BARU SELESAI DI SINI]
+
 // --- Inisialisasi Klien & Variabel ---
 const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const prisma = new PrismaClient(); // <-- PENTING
